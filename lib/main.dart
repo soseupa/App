@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:gaori/screen/map.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+
+ void main(){
+   initializeDateFormatting().then((_) => runApp(MaterialApp(
+     home: MapPage(),
+   )));
+
+
+ }
+
+
+
