@@ -31,17 +31,19 @@ dependencies:
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.0
 
+  intl: ^0.18.0
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
+  table_calendar: ^3.0.9
   flutter_test:
     sdk: flutter
 
 flutter_native_splash:
-  image: assets/image/Logo.png
+  image: assets/image/main_logo.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -55,7 +57,6 @@ flutter_native_splash:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -63,7 +64,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/image/Logo.png
+    - assets/image/logo.png
+    - assets/image/main_logo.png
     - assets/image/Splashback.png
     - assets/image/Splash_background.png
 
@@ -79,6 +81,16 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   # fonts:
+  fonts:
+    - family: NotoSansKR
+      fonts:
+        - asset: assets/font/NotoSansKR-Black.otf
+        - asset: assets/font/NotoSansKR-Bold.otf
+        - asset: assets/font/NotoSansKR-Light.otf
+        - asset: assets/font/NotoSansKR-Medium.otf
+        - asset: assets/font/NotoSansKR-Regular.otf
+        - asset: assets/font/NotoSansKR-Thin.otf
+
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
