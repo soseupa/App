@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'notice.dart';
 
 class FriendsListPage extends StatefulWidget {
