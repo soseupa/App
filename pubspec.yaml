@@ -30,8 +30,12 @@ environment:
 dependencies:
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.0
-
+  table_calendar: ^3.0.9
+  kakaomap_webview: ^0.3.0
+  flutter_swipe_action_cell: ^3.1.0
+  flutter_animated_dialog: ^2.0.1
   intl: ^0.18.0
+
   flutter:
     sdk: flutter
 
@@ -68,6 +72,9 @@ flutter:
     - assets/image/main_logo.png
     - assets/image/Splashback.png
     - assets/image/Splash_background.png
+    - assets/image/logo.png
+    - assets/image/friendrequeset.png
+    - assets/json/information.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

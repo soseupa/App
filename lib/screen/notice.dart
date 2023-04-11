@@ -12,7 +12,7 @@ class _NoticePageState extends State<NoticePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF5F5F5),
+      backgroundColor: const Color(0xffFFFFFF),
       appBar: buildAppBar(),
       body: Center(
         child: Column(
@@ -88,7 +88,7 @@ class _NoticePageState extends State<NoticePage> {
         iconTheme: const IconThemeData(
             color: Colors.black
         ),
-        backgroundColor: const Color(0xffF5F5F5),
+        backgroundColor: const Color(0xffFFFFFF),
         elevation: 0,
         title: const Text(
             '알람',
