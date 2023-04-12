@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:gaori/screen/detailschdeule.dart';
 import 'package:gaori/screen/notice.dart';
+import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'addschedule.dart';
@@ -22,6 +24,13 @@ class MapPage extends StatefulWidget {
 class _MapPageState extends State<MapPage> {
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
   var json_data;
+
+  DateTime selectedDay = DateTime(
+    DateTime.now().year,
+    DateTime.now().month,
+    DateTime.now().day,
+  );
+  DateTime focusedDay = DateTime.now();
 
   @override
   void initState() {
@@ -57,7 +66,7 @@ class _MapPageState extends State<MapPage> {
         body: Column(
           children: [
             buildCalendarHeader(month),
-            buildCalendarBody(_now, _selectedDay),
+            buildCalendarBody(_now, selectedDay, focusedDay),
             PlusButton(user, _now),
             SizedBox(
               height: 8,
@@ -86,7 +95,11 @@ class _MapPageState extends State<MapPage> {
                 borderRadius: BorderRadius.circular(14.78),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => DetailSchedulePage()));
+
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +148,7 @@ class _MapPageState extends State<MapPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const AddSchedulePage()));
+                      builder: (context) => KakaoMapTest()));
             },
             child: Icon(
               Icons.add,
@@ -176,30 +189,38 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  Padding buildCalendarBody(DateTime _now, DateTime? _selectedDay) {
+  Padding buildCalendarBody(
+      DateTime _now, DateTime selectedDay, DateTime focusedDay) {
     return Padding(
-      padding: const EdgeInsets.only(right: 30, left: 30),
+      padding: const EdgeInsets.only(right: 20, left: 20),
       child: TableCalendar(
         firstDay: DateTime(_now.year, _now.month, 1),
         lastDay: DateTime(_now.year, _now.month + 1, 0),
         focusedDay: _now,
         locale: 'ko-KR',
         headerVisible: false,
-        onDaySelected: (selectedDay, focusedDay) {
-          if (!isSameDay(_selectedDay, selectedDay)) {
-            // Call `setState()` when updating the selected day
+        onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
+          if(selectedDay == _now) {
+
+          }
+          else {
             setState(() {
-              _selectedDay = selectedDay;
-              _now = focusedDay;
+              this.selectedDay = selectedDay;
+              this.focusedDay = focusedDay;
             });
           }
+        },
+        selectedDayPredicate: (DateTime day) {
+          // selectedDay 와 동일한 날짜의 모양을 바꿔줍니다.
+          return isSameDay(selectedDay, day);
         },
         calendarBuilders: CalendarBuilders(
           dowBuilder: (context, day) {
             switch (day.weekday) {
               case 1:
                 return const Center(
-                  child: Text('월'),
+                  child: Text('월',
+                  style: TextStyle(),),
                 );
               case 2:
                 return const Center(
@@ -231,10 +252,16 @@ class _MapPageState extends State<MapPage> {
           },
         ),
         calendarStyle: CalendarStyle(
-            selectedDecoration: BoxDecoration(
-              color: Colors.blue,
-              shape: BoxShape.circle,
+            selectedTextStyle: TextStyle(
+                color: Colors.black
             ),
+            defaultDecoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(7.29)),
+            selectedDecoration: BoxDecoration(
+                // color: Color(0xffFBEFF5),
+                color: Color(0xffF9F7F7),
+                borderRadius: BorderRadius.circular(7.39)),
             markersAutoAligned: true,
             markerSize: 100,
             markerSizeScale: 50,
@@ -246,7 +273,7 @@ class _MapPageState extends State<MapPage> {
               fontSize: 16.0,
             ),
             todayDecoration: BoxDecoration(
-                color: const Color(0xffF9E6EF),
+                // color: const Color(0xffF9E6EF),
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(7.39))
 
