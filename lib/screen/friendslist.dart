@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
-import 'package:vector_math/vector_math.dart' as math;
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 class FriendsListPage extends StatefulWidget {
@@ -25,42 +25,64 @@ class _FriendsListPageState extends State<FriendsListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Search(),
-            // Column(children: [
-            //   for (int i = 0; i < widget.friendsList.length; i++) UserList(i),
-            //   NotFriend()
-            // ]),
             Padding(
-              padding: const EdgeInsets.only(top: 250.0),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 10.0),
-                      child: Image.asset(
-                        'assets/image/noFriend.png',
-                        height: 100,
+              padding: const EdgeInsets.only(left: 15.0),
+              child: SingleChildScrollView(
+                child: Column(children: [
+                  for (int i = 0; i < widget.friendsList.length; i++)
+                  Slidable(
+                      key: ValueKey(i),
+                      endActionPane: ActionPane(
+                        extentRatio: 0.25,
+                        motion: ScrollMotion(),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {},
+                            backgroundColor: Colors.red,
+                            foregroundColor: Colors.white,
+                            icon: Icons.delete,
+                            label: '친구 삭제',
+                          ),
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 30.0),
-                      child: Text('친구가 없어요...',
-                          style: TextStyle(
-                              fontSize: 15,
-                              fontFamily: 'NotoSansKR',
-                              color: Colors.black,
-                              fontWeight: FontWeight.w200)),
-                    ),
-                    Text('친구를 추가해 볼까요?',
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontFamily: 'NotoSansKR',
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400))
-                  ],
-                ),
+                      child: UserList(i)),
+
+                ]),
               ),
             ),
+            NotFriend()
+            // Padding(
+            //   padding: const EdgeInsets.only(top: 250.0),
+            //   child: Center(
+            //     child: Column(
+            //       mainAxisAlignment: MainAxisAlignment.center,
+            //       children: [
+            //         Padding(
+            //           padding: const EdgeInsets.only(right: 10.0),
+            //           child: Image.asset(
+            //             'assets/image/noFriend.png',
+            //             height: 100,
+            //           ),
+            //         ),
+            //         Padding(
+            //           padding: const EdgeInsets.only(top: 30.0),
+            //           child: Text('친구가 없어요...',
+            //               style: TextStyle(
+            //                   fontSize: 15,
+            //                   fontFamily: 'NotoSansKR',
+            //                   color: Colors.black,
+            //                   fontWeight: FontWeight.w200)),
+            //         ),
+            //         Text('친구를 추가해 볼까요?',
+            //             style: TextStyle(
+            //                 fontSize: 17,
+            //                 fontFamily: 'NotoSansKR',
+            //                 color: Colors.black,
+            //                 fontWeight: FontWeight.w400))
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
