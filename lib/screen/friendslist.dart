@@ -21,15 +21,104 @@ class _FriendsListPageState extends State<FriendsListPage> {
       appBar: buildAppBar(),
       body: Center(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Search(),
-            Column(
-              children: [
-                for (int i = 0; i < widget.friendsList.length; i++) UserList(i)
-              ],
-            )
+            // Column(children: [
+            //   for (int i = 0; i < widget.friendsList.length; i++) UserList(i),
+            //   NotFriend()
+            // ]),
+            Padding(
+              padding: const EdgeInsets.only(top: 250.0),
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 10.0),
+                      child: Image.asset(
+                        'assets/image/noFriend.png',
+                        height: 100,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 30.0),
+                      child: Text('친구가 없어요...',
+                          style: TextStyle(
+                              fontSize: 15,
+                              fontFamily: 'NotoSansKR',
+                              color: Colors.black,
+                              fontWeight: FontWeight.w200)),
+                    ),
+                    Text('친구를 추가해 볼까요?',
+                        style: TextStyle(
+                            fontSize: 17,
+                            fontFamily: 'NotoSansKR',
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400))
+                  ],
+                ),
+              ),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Padding NotFriend() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 18.0),
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          width: 400,
+          height: 66,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xffF9F7F7)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(left: 18.0),
+                    child: Text('${'박다은'}',
+                        style: TextStyle(
+                            fontSize: 18,
+                            fontFamily: 'NotoSansKR',
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600)),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.only(right: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(right: 5.0),
+                      child: Text('dadadada@gmail.com',
+                          style: TextStyle(
+                              fontSize: 17,
+                              fontFamily: 'NotoSansKR',
+                              color: Colors.black,
+                              fontWeight: FontWeight.w300)),
+                    ),
+                    InkWell(
+                        onTap: () => _rotateDialog('박다은'),
+                        child: Icon(Icons.add))
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -39,7 +128,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     return Padding(
       padding: const EdgeInsets.only(top: 18.0),
       child: InkWell(
-        onTap: () => _rotateDialog(widget.friendsList[i].name),
+        onTap: () => alreadyFriends('${widget.friendsList[i].name}'),
         child: Container(
           width: 400,
           height: 66,
@@ -211,6 +300,77 @@ class _FriendsListPageState extends State<FriendsListPage> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        });
+  }
+
+  void alreadyFriends(String name) {
+    showAnimatedDialog(
+        context: context,
+        barrierDismissible: true,
+        animationType: DialogTransitionType.fadeScale,
+        duration: const Duration(milliseconds: 350),
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color(0xffECECEC),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            //Dialog Main Title
+            title: Column(
+              children: [
+                Image.asset(
+                  'assets/image/friendsGaori.png',
+                  height: 130,
+                  width: 130,
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Center(
+                  child: RichText(
+                      text: TextSpan(
+                          text: name,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w600),
+                          children: const [
+                        TextSpan(
+                            text: '님과 친구입니다!',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'NotoSansKR',
+                              fontSize: 17,
+                            )),
+                      ])),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xffFF3F9B),
+                          elevation: 0,
+                          fixedSize: Size(130, 30)),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text("확인"),
                     ),
                   ),
                 ],

@@ -73,6 +73,8 @@ flutter:
     - assets/image/Splashback.png
     - assets/image/Splash_background.png
     - assets/image/logo.png
+    - assets/image/friendsGaori.png
+    - assets/image/noFriend.png
     - assets/image/friendrequeset.png
     - assets/json/information.json
 

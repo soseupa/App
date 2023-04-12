@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:gaori/screen/detailschdeule.dart';
 import 'package:gaori/screen/notice.dart';
+import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'addschedule.dart';
@@ -93,7 +95,11 @@ class _MapPageState extends State<MapPage> {
                 borderRadius: BorderRadius.circular(14.78),
               ),
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (context) => DetailSchedulePage()));
+
+            },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,7 +148,7 @@ class _MapPageState extends State<MapPage> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const AddSchedulePage()));
+                      builder: (context) => KakaoMapTest()));
             },
             child: Icon(
               Icons.add,
@@ -213,7 +219,8 @@ class _MapPageState extends State<MapPage> {
             switch (day.weekday) {
               case 1:
                 return const Center(
-                  child: Text('월'),
+                  child: Text('월',
+                  style: TextStyle(),),
                 );
               case 2:
                 return const Center(
