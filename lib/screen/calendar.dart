@@ -54,7 +54,6 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     var month = DateTime.now().month;
-    DateTime? _selectedDay;
     DateTime _now = DateTime.now();
     String user = "조수현";
     String scheduleName = "벚꽃데이트";
@@ -67,7 +66,7 @@ class _MapPageState extends State<MapPage> {
           children: [
             buildCalendarHeader(month),
             buildCalendarBody(_now, selectedDay, focusedDay),
-            PlusButton(user, _now),
+            PlusButton(user, selectedDay),
             SizedBox(
               height: 8,
             ),
@@ -131,34 +130,34 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  Row PlusButton(String user, DateTime _now) {
+  Row PlusButton(String user, DateTime selectedDay) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 30),
-          child: TodaySchedule(user, _now),
+          child: TodaySchedule(user, selectedDay),
         ),
-        SizedBox(
-          width: 120,
-        ),
-        InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => KakaoMapTest()));
-            },
-            child: Icon(
-              Icons.add,
-              size: 30,
-            ))
+        Padding(
+          padding: const EdgeInsets.only(right: 35.0),
+          child: InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => KakaoMapTest()));
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
+              )),
+        )
       ],
     );
   }
 
-  Padding TodaySchedule(String user, DateTime _now) {
+  Padding TodaySchedule(String user, DateTime selectedDay) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: RichText(
@@ -171,7 +170,7 @@ class _MapPageState extends State<MapPage> {
                   fontWeight: FontWeight.w300),
               children: <TextSpan>[
             TextSpan(
-                text: '${_now.month}월 ${_now.day}일',
+                text: '${selectedDay.month}월 ${selectedDay.day}일',
                 style: TextStyle(
                   color: Color(0xffFF00A8),
                   fontWeight: FontWeight.bold,
