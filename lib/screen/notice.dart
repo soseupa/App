@@ -20,22 +20,7 @@ class _NoticePageState extends State<NoticePage> {
           child: Column(
             children: [
               for (int i = 0; i < 3; i++)
-              Slidable(
-                  key: ValueKey(i),
-                  endActionPane: ActionPane(
-                    extentRatio: 0.2,
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) {},
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: '삭제',
-                      ),
-                    ],
-                  ),
-                  child: Notice()),
+                Notice(i)
             ],
           ),
         ),
@@ -43,9 +28,25 @@ class _NoticePageState extends State<NoticePage> {
     );
   }
 
-  Padding Notice() {
-    return Padding(
+  Padding Notice(int i) {
+    return
+      Padding(
       padding: const EdgeInsets.only(top: 30),
+      child: Slidable(
+        key: ValueKey(i),
+        endActionPane: ActionPane(
+          extentRatio: 0.2,
+          motion: ScrollMotion(),
+          children: [
+            SlidableAction(
+              onPressed: (context) {},
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              icon: Icons.delete,
+              label: '삭제',
+            ),
+          ],
+        ),
       child: SizedBox(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -100,7 +101,8 @@ class _NoticePageState extends State<NoticePage> {
           ],
         ),
       ),
-    );
+    )
+      );
   }
 
   AppBar buildAppBar() {
