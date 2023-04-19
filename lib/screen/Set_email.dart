@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Signup.dart';
 
@@ -131,13 +130,13 @@ class SetEmailPageState extends State<SetEmailPage> {
               child: ElevatedButton(
                 onPressed: isButtonActive
                     ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SetEmailPage()),
-                  );
-                  setState(() => isButtonActive = false);
-                }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SetEmailPage()),
+                        );
+                        setState(() => isButtonActive = false);
+                      }
                     : null,
                 child: Text(
                   "완료",
