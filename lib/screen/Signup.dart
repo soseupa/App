@@ -16,6 +16,10 @@ class _SignupPageState extends State<SignupPage> {
   late TextEditingController controller2;
   late TextEditingController controller3;
 
+  final myController = TextEditingController();
+  late String nicknameInput;
+  late String passwordInput;
+
   @override
   void initState() {
     super.initState();
@@ -82,6 +86,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 320,
                       height: 48,
                       child: TextField(
+                        controller: myController,
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -111,6 +116,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 320,
                       height: 48,
                       child: TextField(
+                        controller: myController,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -171,6 +177,8 @@ class _SignupPageState extends State<SignupPage> {
                               builder: (context) => SetEmailPage()),
                         );
                         setState(() => isButtonActive = false);
+                        nicknameInput = myController.value.text;
+
                       }
                     : null,
                 child: Text(
