@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Signup.dart';
 
+import 'Start_page.dart';
+
 class SetEmailPage extends StatefulWidget {
   const SetEmailPage({Key? key}) : super(key: key);
 
@@ -87,8 +89,14 @@ class SetEmailPageState extends State<SetEmailPage> {
                           ),
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
+                          suffixIcon:
+                            TextButton(
+                              onPressed: () {  },
+                                child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
+                            ),
                         ),
                       ),
+                    ),
                     ),
                   ],
                 ),
@@ -134,7 +142,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SetEmailPage()),
+                        builder: (context) => StartPage()),
                   );
                   setState(() => isButtonActive = false);
                 }
