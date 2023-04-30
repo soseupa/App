@@ -83,10 +83,10 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
-                        controller: myController,
+                        // controller: myController,
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -113,10 +113,10 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
-                        controller: myController,
+                        // controller: myController,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -144,7 +144,7 @@ class _SignupPageState extends State<SignupPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
                         obscureText: true,
@@ -190,7 +190,7 @@ class _SignupPageState extends State<SignupPage> {
                   backgroundColor: Color(0xffFF419C),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14.0)),
-                  minimumSize: Size(320, 48),
+                  minimumSize: Size(360, 48),
                 ),
               ),
             ),
