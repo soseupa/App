@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
                         decoration: InputDecoration(
@@ -110,7 +110,7 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
                         obscureText: true,
@@ -154,7 +154,7 @@ class _LoginPageState extends State<LoginPage> {
                   backgroundColor: Color(0xffFF419C),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14.0)),
-                  minimumSize: Size(320, 48),
+                  minimumSize: Size(360, 48),
                 ),
               ),
             ),
