@@ -9,18 +9,15 @@ class AddSchedulePage extends StatefulWidget {
 }
 
 class _AddSchedulePageState extends State<AddSchedulePage> {
-  // Size size = MediaQuery.of(context).size;
-  static String kakaoMapKey = '	2c9d8c32312ebbee555a90fb9aa2faf4';
+  static String kakaoMapKey = '2c9d8c32312ebbee555a90fb9aa2faf4';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
-      body: Column(
-        children: [
-          KakaoMapView(
-            width: 600,
-            height: 600,
+        appBar: buildAppBar(),
+        body: KakaoMapView(
+            width: 500,
+            height: 400,
             kakaoMapKey: kakaoMapKey,
             lat: 33.450701,
             lng: 126.570667,
@@ -28,16 +25,9 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
             showZoomControl: true,
             markerImageURL:
                 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
-            onTapMarker: (message) async {
-              ScaffoldMessenger.of(context)
-                  .showSnackBar(SnackBar(content: Text('Marker is clicked')));
-
-              //await _openKakaoMapScreen(context);
-            },
-          )
-        ],
-      ),
-    );
+            onTapMarker: (message) {
+              //event callback when the marker is tapped
+            }));
   }
 
   AppBar buildAppBar() {

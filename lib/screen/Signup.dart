@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Set_email.dart';
 import 'package:gaori/screen/Start_page.dart';
