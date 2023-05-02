@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Signup.dart';
 
+import 'Start_page.dart';
+
 class SetEmailPage extends StatefulWidget {
   const SetEmailPage({Key? key}) : super(key: key);
 
@@ -75,7 +77,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
                         decoration: InputDecoration(
@@ -86,8 +88,14 @@ class SetEmailPageState extends State<SetEmailPage> {
                           ),
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
+                          suffixIcon:
+                            TextButton(
+                              onPressed: () {  },
+                                child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
+                            ),
                         ),
                       ),
+                    ),
                     ),
                   ],
                 ),
@@ -104,7 +112,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     SizedBox(
-                      width: 320,
+                      width: 360,
                       height: 48,
                       child: TextField(
                         decoration: InputDecoration(
@@ -137,6 +145,13 @@ class SetEmailPageState extends State<SetEmailPage> {
                         );
                         setState(() => isButtonActive = false);
                       }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => StartPage()),
+                  );
+                  setState(() => isButtonActive = false);
+                }
                     : null,
                 child: Text(
                   "완료",
@@ -147,7 +162,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                   backgroundColor: Color(0xffFF419C),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(14.0)),
-                  minimumSize: Size(320, 48),
+                  minimumSize: Size(360, 48),
                 ),
               ),
             ),
