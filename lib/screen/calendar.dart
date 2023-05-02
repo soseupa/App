@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:gaori/class/schedule.dart';
+import 'package:gaori/class/task.dart';
 import 'package:gaori/screen/detailschdeule.dart';
 import 'package:gaori/screen/notice.dart';
+import 'package:gaori/screen/test.dart';
 import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -22,7 +25,7 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
-  var json_data;
+ var json_data;
 
   DateTime selectedDay = DateTime(
     DateTime.now().year,
@@ -34,6 +37,7 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
@@ -56,7 +60,6 @@ class _MapPageState extends State<MapPage> {
     DateTime _now = DateTime.now();
     String user = "조수현";
     String scheduleName = "벚꽃데이트";
-    List<String> members = ['박다은', '조수현', '김세진'];
 
     return Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
@@ -69,65 +72,11 @@ class _MapPageState extends State<MapPage> {
             SizedBox(
               height: 8,
             ),
-            Column(
-              children: [
-                for (int i = 0; i < 3; i++) Schedules(scheduleName, members)
-              ],
-            )
+            // TaskList()
+
+            // Test()
           ],
         ));
-  }
-
-  Padding Schedules(String scheduleName, List<String> members) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: SizedBox(
-        width: 380,
-        height: 80,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              fixedSize: Size(30, 30),
-              elevation: 0,
-              backgroundColor: Color(0xffF9F7F3),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14.78),
-              ),
-            ),
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => DetailSchedulePage()));
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$scheduleName",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'NotoSansKR',
-                      fontWeight: FontWeight.w500),
-                ),
-                Row(
-                  children: [
-                    for (int i = 0; i < members.length; i++)
-                      Text(
-                        '${members[i]} ',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontFamily: 'NotoSansKR',
-                            fontWeight: FontWeight.w300),
-                      )
-                  ],
-                )
-              ],
-            )),
-      ),
-    );
   }
 
   Row PlusButton(String user, DateTime selectedDay) {
