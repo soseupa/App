@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Set_email.dart';
 import 'package:gaori/screen/Start_page.dart';
@@ -11,30 +10,43 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  bool isButtonActive = true;
+  bool isButtonActive = false;
   late TextEditingController controller = TextEditingController();
-  final TextEditingController nicknameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController passwordCheckController = TextEditingController();
-
+  final nicknameController = TextEditingController(); // 닉네임 넣기
+  final passwordController = TextEditingController(); // 비밀번호 넣기
+  final passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
   final myController = TextEditingController();
-  late String nicknameInput;
-  late String passwordInput;
+  final _confirmPasswordFocusNode = FocusNode();
+  bool _isPasswordMatch = true;
+  bool _isButtonEnabled = false;
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    passwordCheckController.dispose();
+    _confirmPasswordFocusNode.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
-    controller.addListener(() {
-      final isButtonActive = true;
-      setState(() => this.isButtonActive = isButtonActive);
+    nicknameController.addListener(_updateButtonState);
+    passwordController.addListener(_updateButtonState);
+    passwordCheckController.addListener(_updateButtonState);
+  }
+
+  void _updateButtonState() { // 버튼이 활성화
+    setState(() {
+      _isButtonEnabled = nicknameController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty;
     });
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void _checkPasswordMatch() {
+    setState(() {
+      _isPasswordMatch = passwordController.text == passwordCheckController.text;
+    });
   }
 
   @override
@@ -175,7 +187,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        controller: passwordController, // 비밀번호 저장
+                        controller: passwordController,// 비밀번호 저장
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -186,6 +198,7 @@ class _SignupPageState extends State<SignupPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
+                        onChanged: (_) => _checkPasswordMatch(),
                       ),
                     ),
                   ],
@@ -207,12 +220,20 @@ class _SignupPageState extends State<SignupPage> {
                       height: 48,
                       child: TextField(
                         controller : passwordCheckController,
+                        focusNode: _confirmPasswordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(14.0),
+                            borderSide: BorderSide(
+                              width: 2.0,
+                              color: _isPasswordMatch ? Colors.black : Colors.red,
+                            ),
                           ),
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
@@ -228,7 +249,7 @@ class _SignupPageState extends State<SignupPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: isButtonActive
+                onPressed: _isButtonEnabled
                     ? () {
                         Navigator.push(
                           context,
