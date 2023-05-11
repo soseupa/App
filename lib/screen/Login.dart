@@ -11,25 +11,32 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  bool isButtonActive = false;
   late TextEditingController controller;
-  late TextEditingController controller2;
-  late TextEditingController controller3;
+  bool isButtonActive = false;
+  bool _isButtonEnabled = false;
+
+  final nicknameController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nicknameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
-    controller.addListener(() {
-      final isButtonActive = controller.text.isNotEmpty;
-      setState(() => this.isButtonActive = isButtonActive);
-    });
+    nicknameController.addListener(_updateButtonState);
+    passwordController.addListener(_updateButtonState);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void _updateButtonState() { // 버튼이 활성화
+    setState(() {
+      _isButtonEnabled = nicknameController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -82,6 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
+                        controller: nicknameController,
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -121,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
-                        controller: controller,
+                        controller: passwordController,
                       ),
                     ),
                   ],
@@ -133,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: isButtonActive
+                onPressed: _isButtonEnabled
                     ? () {
                         Navigator.push(
                           context,

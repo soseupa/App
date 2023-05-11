@@ -12,22 +12,31 @@ class SetEmailPage extends StatefulWidget {
 
 class SetEmailPageState extends State<SetEmailPage> {
   bool isButtonActive = false;
+  bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;
+
+  final emailController = TextEditingController();
+  final verificationCodeController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    verificationCodeController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
-    controller.addListener(() {
-      final isButtonActive = controller.text.isNotEmpty;
-      setState(() => this.isButtonActive = isButtonActive);
-    });
+    emailController.addListener(_updateButtonState);
+    verificationCodeController.addListener(_updateButtonState);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void _updateButtonState() { // 버튼이 활성화
+    setState(() {
+      _isButtonEnabled = emailController.text.isNotEmpty &&
+          verificationCodeController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -138,6 +147,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
+                        controller: emailController,
                         decoration: InputDecoration(
                           hintText: '이메일을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -182,7 +192,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
-                        controller: controller,
+                        controller: verificationCodeController
                       ),
                     ),
                   ],
@@ -194,7 +204,7 @@ class SetEmailPageState extends State<SetEmailPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: isButtonActive
+                onPressed: _isButtonEnabled
                     ? () {
                         Navigator.push(
                           context,
