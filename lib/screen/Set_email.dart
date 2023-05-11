@@ -56,10 +56,68 @@ class SetEmailPageState extends State<SetEmailPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(42.0),
+            padding: const EdgeInsets.only(top:42.0),
             child: Center(
               child: Image.asset('assets/image/main_logo.png',
                   width: 109, height: 117),
+            ),
+          ),
+          Padding( // progress bar
+            padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Center(
+                    child: Text( '1',
+                      style: TextStyle(
+                        fontSize:16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    color: Color(0xffFF67B0),
+                  ),
+                ),
+                Container(
+                  height: 4,
+                  width: 68,
+                  color: Color(0xffFF67B0),
+                ),
+                Container(
+                  child: Center(
+                    child: Text( '2',
+                      style: TextStyle(
+                        fontSize:16,
+                        color: Color(0xffFF67B0),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    border: Border.all(
+                      width: 4,
+                      color: Color(0xffFF67B0),
+                    ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xfFF00A8).withOpacity(.30),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Column(

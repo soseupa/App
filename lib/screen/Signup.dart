@@ -10,10 +10,11 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  bool isButtonActive = false;
-  late TextEditingController controller;
-  late TextEditingController controller2;
-  late TextEditingController controller3;
+  bool isButtonActive = true;
+  late TextEditingController controller = TextEditingController();
+  final TextEditingController nicknameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController passwordCheckController = TextEditingController();
 
   final myController = TextEditingController();
   late String nicknameInput;
@@ -24,7 +25,7 @@ class _SignupPageState extends State<SignupPage> {
     super.initState();
     controller = TextEditingController();
     controller.addListener(() {
-      final isButtonActive = controller.text.isNotEmpty;
+      final isButtonActive = true;
       setState(() => this.isButtonActive = isButtonActive);
     });
   }
@@ -61,11 +62,69 @@ class _SignupPageState extends State<SignupPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(42.0),
+            padding: const EdgeInsets.only(top:42.0),
             child: Center(
               child: Image.asset('assets/image/main_logo.png',
                   width: 109, height: 117),
             ),
+          ),
+          Padding( // progress bar
+              padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: Center(
+                      child: Text( '1',
+                        style: TextStyle(
+                          fontSize:16,
+                          color: Color(0xffFF67B0),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    height: 39,
+                    width: 39,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(400),
+                      border: Border.all(
+                        width: 4,
+                        color: Color(0xffFF67B0),
+                      ),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0xfFF00A8).withOpacity(.30),
+                          spreadRadius: 3,
+                          blurRadius: 5,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 4,
+                    width: 68,
+                    color: Color(0xffFF67B0),
+                  ),
+                  Container(
+                    child: Center(
+                      child: Text( '2',
+                        style: TextStyle(
+                          fontSize:16,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    height: 39,
+                    width: 39,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(400),
+                      color: Color(0xffFF67B0),
+                    ),
+                  ),
+                ],
+              ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,7 +144,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        // controller: myController,
+                        controller: nicknameController, // 닉네임 저장
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -115,7 +174,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        // controller: myController,
+                        controller: passwordController, // 비밀번호 저장
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -146,6 +205,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
+                        controller : passwordCheckController,
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -156,7 +216,6 @@ class _SignupPageState extends State<SignupPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
-                        controller: controller,
                       ),
                     ),
                   ],
@@ -175,9 +234,6 @@ class _SignupPageState extends State<SignupPage> {
                           MaterialPageRoute(
                               builder: (context) => SetEmailPage()),
                         );
-                        setState(() => isButtonActive = false);
-                        nicknameInput = myController.value.text;
-
                       }
                     : null,
                 child: Text(
