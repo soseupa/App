@@ -12,22 +12,31 @@ class SetEmailPage extends StatefulWidget {
 
 class SetEmailPageState extends State<SetEmailPage> {
   bool isButtonActive = false;
+  bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;
+
+  final emailController = TextEditingController();
+  final verificationCodeController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    verificationCodeController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
-    controller.addListener(() {
-      final isButtonActive = controller.text.isNotEmpty;
-      setState(() => this.isButtonActive = isButtonActive);
-    });
+    emailController.addListener(_updateButtonState);
+    verificationCodeController.addListener(_updateButtonState);
   }
 
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
+  void _updateButtonState() { // 버튼이 활성화
+    setState(() {
+      _isButtonEnabled = emailController.text.isNotEmpty &&
+          verificationCodeController.text.isNotEmpty;
+    });
   }
 
   @override
@@ -56,10 +65,68 @@ class SetEmailPageState extends State<SetEmailPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(42.0),
+            padding: const EdgeInsets.only(top:42.0),
             child: Center(
               child: Image.asset('assets/image/main_logo.png',
                   width: 109, height: 117),
+            ),
+          ),
+          Padding( // progress bar
+            padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Center(
+                    child: Text( '1',
+                      style: TextStyle(
+                        fontSize:16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    color: Color(0xffFF67B0),
+                  ),
+                ),
+                Container(
+                  height: 4,
+                  width: 68,
+                  color: Color(0xffFF67B0),
+                ),
+                Container(
+                  child: Center(
+                    child: Text( '2',
+                      style: TextStyle(
+                        fontSize:16,
+                        color: Color(0xffFF67B0),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    border: Border.all(
+                      width: 4,
+                      color: Color(0xffFF67B0),
+                    ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xfFF00A8).withOpacity(.30),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
           Column(
@@ -80,6 +147,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
+                        controller: emailController,
                         decoration: InputDecoration(
                           hintText: '이메일을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -124,7 +192,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
-                        controller: controller,
+                        controller: verificationCodeController
                       ),
                     ),
                   ],
@@ -136,7 +204,7 @@ class SetEmailPageState extends State<SetEmailPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: isButtonActive
+                onPressed: _isButtonEnabled
                     ? () {
                         Navigator.push(
                           context,
