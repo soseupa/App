@@ -3,11 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
-import 'package:gaori/class/schedule.dart';
-import 'package:gaori/class/task.dart';
-import 'package:gaori/screen/detailschdeule.dart';
 import 'package:gaori/screen/notice.dart';
-import 'package:gaori/screen/test.dart';
 import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 

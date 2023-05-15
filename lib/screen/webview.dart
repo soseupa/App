@@ -1,18 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:kakaomap_webview/kakaomap_webview.dart';
 
-const String kakaoMapKey = 'd6f2f1f95c29ecacf0c5d108d266c761';
+const String kakaoMapKey = '2c9d8c32312ebbee555a90fb9aa2faf4';
 
 class KakaoMapTest extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(title: Text('Kakao map webview test')),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        title: Text(
+          '일정추가',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 23,
+              fontFamily: 'NotoSansKR',
+              fontWeight: FontWeight.w500),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 10.0),
+            child: Center(
+              child: InkWell(
+                onTap: () {},
+                child: const Text('완료',
+                    style: TextStyle(
+                        fontSize: 18,
+                        fontFamily: 'NotoSansKR',
+                        color: Color(0xffFF3F9B),
+                        fontWeight: FontWeight.w400)),
+              ),
+            ),
+          ),
+        ],
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // KakaoMapView
           KakaoMapView(
               width: size.width,
               height: 600,
@@ -29,23 +58,8 @@ class KakaoMapTest extends StatelessWidget {
 
                 //await _openKakaoMapScreen(context);
               }),
-          ElevatedButton(
-              child: Text('Kakao map screen'),
-              onPressed: () async {
-                await _openKakaoMapScreen(context);
-              })
         ],
       ),
     );
-  }
-
-  // kakao map 지도 검색으로 이동
-  Future<void> _openKakaoMapScreen(BuildContext context) async {
-    KakaoMapUtil util = KakaoMapUtil();
-
-    String url = await util.getMapScreenURL(33.450701, 126.570667, name: '조수현');
-
-    Navigator.push(
-        context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));
   }
 }
