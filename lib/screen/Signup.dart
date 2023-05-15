@@ -13,8 +13,8 @@ class _SignupPageState extends State<SignupPage> {
   bool isButtonActive = false;
   late TextEditingController controller = TextEditingController();
   final nicknameController = TextEditingController(); // 닉네임 넣기
-  final passwordController = TextEditingController(); // 비밀번호 넣기
-  final passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
+  final TextEditingController passwordController = TextEditingController(); // 비밀번호 넣기
+  final TextEditingController passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
   final myController = TextEditingController();
   final _confirmPasswordFocusNode = FocusNode();
   bool _isPasswordMatch = true;
@@ -39,13 +39,18 @@ class _SignupPageState extends State<SignupPage> {
   void _updateButtonState() { // 버튼이 활성화
     setState(() {
       _isButtonEnabled = nicknameController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty;
+          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && _isPasswordMatch;
     });
   }
 
   void _checkPasswordMatch() {
     setState(() {
-      _isPasswordMatch = passwordController.text == passwordCheckController.text;
+      if(passwordController.text != passwordCheckController.text) {
+        _isPasswordMatch = false;
+      }
+      else {
+        _isPasswordMatch = true;
+      }
     });
   }
 
@@ -224,16 +229,16 @@ class _SignupPageState extends State<SignupPage> {
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
-                          border: OutlineInputBorder(
+                          enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
                           ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(14.0),
+                          border: OutlineInputBorder(
                             borderSide: BorderSide(
-                              width: 2.0,
-                              color: _isPasswordMatch ? Colors.black : Colors.red,
+                              width: 2,
+                              color: _isPasswordMatch ? Colors.transparent : Colors.red,
                             ),
+                            borderRadius: BorderRadius.circular(14.0),
                           ),
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
