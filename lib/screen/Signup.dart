@@ -47,9 +47,11 @@ class _SignupPageState extends State<SignupPage> {
     setState(() {
       if(passwordController.text != passwordCheckController.text) {
         _isPasswordMatch = false;
+        print("1");
       }
       else {
         _isPasswordMatch = true;
+        print("2");
       }
     });
   }
@@ -234,10 +236,7 @@ class _SignupPageState extends State<SignupPage> {
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              width: 2,
-                              color: _isPasswordMatch ? Colors.transparent : Colors.red,
-                            ),
+                            borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           filled: true,
