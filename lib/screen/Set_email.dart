@@ -223,6 +223,13 @@ class SetEmailPageState extends State<SetEmailPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SetEmailPage()),
+                        );
+                        setState(() => isButtonActive = false);
+                      }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

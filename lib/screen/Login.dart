@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/calendar.dart';
-import 'package:gaori/screen/homepage.dart';
 
 import 'Start_page.dart';
 
@@ -145,13 +143,12 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MapPage()),
-                  );
-                  setState(() => isButtonActive = false);
-                }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MapPage()),
+                        );
+                        setState(() => isButtonActive = false);
+                      }
                     : null,
                 child: Text(
                   "완료",

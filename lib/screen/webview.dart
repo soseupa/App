@@ -22,7 +22,7 @@ class KakaoMapTest extends StatelessWidget {
               showMapTypeControl: true,
               showZoomControl: true,
               markerImageURL:
-              'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
+                  'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_red.png',
               onTapMarker: (message) async {
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text('Marker is clicked')));
@@ -43,8 +43,7 @@ class KakaoMapTest extends StatelessWidget {
   Future<void> _openKakaoMapScreen(BuildContext context) async {
     KakaoMapUtil util = KakaoMapUtil();
 
-    String url =
-    await util.getMapScreenURL(33.450701, 126.570667, name: '조수현');
+    String url = await util.getMapScreenURL(33.450701, 126.570667, name: '조수현');
 
     Navigator.push(
         context, MaterialPageRoute(builder: (_) => KakaoMapScreen(url: url)));

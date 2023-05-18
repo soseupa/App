@@ -8,7 +8,6 @@ import 'package:gaori/screen/notice.dart';
 import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import 'addschedule.dart';
 import 'friendslist.dart';
 import 'homepage.dart';
 
@@ -54,7 +53,6 @@ class _MapPageState extends State<MapPage> {
   @override
   Widget build(BuildContext context) {
     var month = DateTime.now().month;
-    DateTime? _selectedDay;
     DateTime _now = DateTime.now();
     String user = "조수현";
     String scheduleName = "벚꽃데이트";
@@ -67,7 +65,7 @@ class _MapPageState extends State<MapPage> {
           children: [
             buildCalendarHeader(month),
             buildCalendarBody(_now, selectedDay, focusedDay),
-            PlusButton(user, _now),
+            PlusButton(user, selectedDay),
             SizedBox(
               height: 8,
             ),
@@ -97,8 +95,9 @@ class _MapPageState extends State<MapPage> {
             ),
             onPressed: () {
               Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => DetailSchedulePage()));
-
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => DetailSchedulePage()));
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -131,34 +130,32 @@ class _MapPageState extends State<MapPage> {
     );
   }
 
-  Row PlusButton(String user, DateTime _now) {
+  Row PlusButton(String user, DateTime selectedDay) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 30),
-          child: TodaySchedule(user, _now),
+          child: TodaySchedule(user, selectedDay),
         ),
-        SizedBox(
-          width: 120,
-        ),
-        InkWell(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => KakaoMapTest()));
-            },
-            child: Icon(
-              Icons.add,
-              size: 30,
-            ))
+        Padding(
+          padding: const EdgeInsets.only(right: 35.0),
+          child: InkWell(
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => KakaoMapTest()));
+              },
+              child: Icon(
+                Icons.add,
+                size: 30,
+              )),
+        )
       ],
     );
   }
 
-  Padding TodaySchedule(String user, DateTime _now) {
+  Padding TodaySchedule(String user, DateTime selectedDay) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0),
       child: RichText(
@@ -171,7 +168,7 @@ class _MapPageState extends State<MapPage> {
                   fontWeight: FontWeight.w300),
               children: <TextSpan>[
             TextSpan(
-                text: '${_now.month}월 ${_now.day}일',
+                text: '${selectedDay.month}월 ${selectedDay.day}일',
                 style: TextStyle(
                   color: Color(0xffFF00A8),
                   fontWeight: FontWeight.bold,
@@ -200,10 +197,8 @@ class _MapPageState extends State<MapPage> {
         locale: 'ko-KR',
         headerVisible: false,
         onDaySelected: (DateTime selectedDay, DateTime focusedDay) {
-          if(selectedDay == _now) {
-
-          }
-          else {
+          if (selectedDay == _now) {
+          } else {
             setState(() {
               this.selectedDay = selectedDay;
               this.focusedDay = focusedDay;
@@ -219,8 +214,10 @@ class _MapPageState extends State<MapPage> {
             switch (day.weekday) {
               case 1:
                 return const Center(
-                  child: Text('월',
-                  style: TextStyle(),),
+                  child: Text(
+                    '월',
+                    style: TextStyle(),
+                  ),
                 );
               case 2:
                 return const Center(
@@ -252,12 +249,10 @@ class _MapPageState extends State<MapPage> {
           },
         ),
         calendarStyle: CalendarStyle(
-            selectedTextStyle: TextStyle(
-                color: Colors.black
-            ),
+            selectedTextStyle: TextStyle(color: Colors.black),
             defaultDecoration: BoxDecoration(
                 shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(7.29)),
+                borderRadius: BorderRadius.circular(7.39)),
             selectedDecoration: BoxDecoration(
                 // color: Color(0xffFBEFF5),
                 color: Color(0xffF9F7F7),
