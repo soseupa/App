@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Signup.dart';
-
+import 'dart:convert';
 import 'Start_page.dart';
 
 class SetEmailPage extends StatefulWidget {
@@ -38,6 +39,21 @@ class SetEmailPageState extends State<SetEmailPage> {
       _isButtonEnabled = emailController.text.isNotEmpty &&
           verificationCodeController.text.isNotEmpty;
     });
+  }
+
+  Future<void> sendEmail() async {
+    var url = Uri.parse('http://localhost:8080/auth/email/check');
+    var email = emailController.text;
+
+    var body = jsonEncode({'email': email});
+
+    var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
+    if(response.statusCode == 200) {
+      print("이메일 전송 성공");
+    }
+    else {
+      print("이메일 전송 실패");
+    }
   }
 
   @override
@@ -159,7 +175,7 @@ class SetEmailPageState extends State<SetEmailPage> {
                           fillColor: Color(0xffF5F5F5),
                           suffixIcon:
                             TextButton(
-                              onPressed: () {  },
+                              onPressed: sendEmail,
                                 child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
                             ),
                         ),
