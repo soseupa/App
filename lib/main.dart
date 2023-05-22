@@ -10,4 +10,5 @@ Future main() async {
   initializeDateFormatting().then((_) => runApp(MaterialApp(
         home: StartPage(),
       )));
+
 }
