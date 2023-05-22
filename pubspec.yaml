@@ -35,7 +35,9 @@ dependencies:
   flutter_swipe_action_cell: ^3.1.0
   flutter_animated_dialog: ^2.0.1
   flutter_slidable: ^1.0.0-dev.3
+  drag_and_drop_lists: ^0.2.1
   intl: ^0.18.0
+  floating_pullup_card: ^1.2.0
 
   flutter:
     sdk: flutter
