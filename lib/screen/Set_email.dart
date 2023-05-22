@@ -174,13 +174,13 @@ class SetEmailPageState extends State<SetEmailPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                           suffixIcon:
-                            TextButton(
-                              onPressed: sendEmail,
-                                child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
+                          TextButton(
+                            onPressed: sendEmail,
+                            child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
                             ),
+                          ),
                         ),
                       ),
-                    ),
                     ),
                   ],
                 ),
@@ -200,16 +200,16 @@ class SetEmailPageState extends State<SetEmailPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        decoration: InputDecoration(
-                          hintText: '이메일 인증코드를 입력해주세요.',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(14.0),
+                          decoration: InputDecoration(
+                            hintText: '이메일 인증코드를 입력해주세요.',
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(14.0),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xffF5F5F5),
                           ),
-                          filled: true,
-                          fillColor: Color(0xffF5F5F5),
-                        ),
-                        controller: verificationCodeController
+                          controller: verificationCodeController
                       ),
                     ),
                   ],
@@ -223,13 +223,6 @@ class SetEmailPageState extends State<SetEmailPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SetEmailPage()),
-                        );
-                        setState(() => isButtonActive = false);
-                      }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
