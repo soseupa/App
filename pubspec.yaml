@@ -1,5 +1,5 @@
 name: gaori
-description: A new Flutter project.
+description: 가자 오디 댄 리슨
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -28,19 +28,29 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  flutter_native_splash: ^2.2.19
+  flutter_launcher_icons: ^0.13.0
+  table_calendar: ^3.0.9
+  kakaomap_webview: ^0.3.0
+  flutter_swipe_action_cell: ^3.1.0
+  flutter_animated_dialog: ^2.0.1
+  flutter_slidable: ^1.0.0-dev.3
+  drag_and_drop_lists: ^0.2.1
   intl: ^0.18.0
+  floating_pullup_card: ^1.2.0
+
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
   table_calendar: ^3.0.9
   flutter_test:
     sdk: flutter
+
+flutter_native_splash:
+  image: assets/image/main_logo.png
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -54,19 +64,22 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-  assets:
-    - assets/image/logo.png
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-
-  #   - images/a_dot_burr.jpeg
-  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/image/logo.png
+    - assets/image/main_logo.png
+    - assets/image/Splashback.png
+    - assets/image/Splash_background.png
+    - assets/image/logo.png
+    - assets/image/friendsGaori.png
+    - assets/image/noFriend.png
+    - assets/image/friendrequeset.png
+    - assets/json/information.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
