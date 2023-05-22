@@ -17,7 +17,6 @@ class _SignupPageState extends State<SignupPage> {
   final TextEditingController passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
   final myController = TextEditingController();
   final _confirmPasswordFocusNode = FocusNode();
-  bool _isPasswordMatch = true;
   bool _isButtonEnabled = false;
 
   @override
@@ -39,20 +38,7 @@ class _SignupPageState extends State<SignupPage> {
   void _updateButtonState() { // 버튼이 활성화
     setState(() {
       _isButtonEnabled = nicknameController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && _isPasswordMatch;
-    });
-  }
-
-  void _checkPasswordMatch() {
-    setState(() {
-      if(passwordController.text != passwordCheckController.text) {
-        _isPasswordMatch = false;
-        print("1");
-      }
-      else {
-        _isPasswordMatch = true;
-        print("2");
-      }
+          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && passwordController.text == passwordCheckController.text;
     });
   }
 
@@ -205,7 +191,6 @@ class _SignupPageState extends State<SignupPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
-                        onChanged: (_) => _checkPasswordMatch(),
                       ),
                     ),
                   ],

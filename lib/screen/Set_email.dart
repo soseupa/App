@@ -13,8 +13,8 @@ class SetEmailPage extends StatefulWidget {
 }
 
 class SetEmailPageState extends State<SetEmailPage> {
-  bool isButtonActive = true;
-  bool _isButtonEnabled = true; // 버튼 유효성
+  bool isButtonActive = false;
+  bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;
   late String receivedCode;
 
@@ -226,12 +226,6 @@ class SetEmailPageState extends State<SetEmailPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                  if(verificationCodeController.text != receivedCode) {
-                    print("같지않음");
-                  }
-                  else {
-                    print("같음");
-                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
