@@ -1,13 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/calendar.dart';
-
 import 'Start_page.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
+}
+
+Future<String> login(String username, String password) async{
+  var url = Uri.parse(''); // Todo url 얻기
+
+  var body = jsonEncode({
+    'username' : username,
+    'password' : password,
+  });
+
+  var response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: body,
+  );
+
+  if (response.statusCode == 200) {
+    var responseData = jsonDecode(response.body);
+    var token = responseData['token'];
+
+    // 토큰 반환
+    return token;
+  } else {
+    throw Exception('로그인에 실패했습니다.');
+  }
 }
 
 class _LoginPageState extends State<LoginPage> {
