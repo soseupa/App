@@ -13,6 +13,7 @@ class SetEmailPage extends StatefulWidget {
 }
 
 class SetEmailPageState extends State<SetEmailPage> {
+  late final InputData inputData;
   bool isButtonActive = false;
   bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;

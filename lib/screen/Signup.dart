@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Set_email.dart';
 import 'package:gaori/screen/Start_page.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -9,7 +11,32 @@ class SignupPage extends StatefulWidget {
   State<SignupPage> createState() => _SignupPageState();
 }
 
+class InputData {
+  String nickname='';
+  String password='';
+  String email='';
+}
+
+/*Future<bool> signUp(String name, String email, String password) async {
+  var url = Uri.parse('');
+
+  var body = jsonEncode({
+    'name' : name,
+    'password' : password,
+    'email' : email,
+  });
+
+  //회원가입 요청 보내기
+  var response = await http.post(
+    url,
+    headers : {'Content-type' : 'application/json'},
+    body : body,
+  );
+} */
+
 class _SignupPageState extends State<SignupPage> {
+  InputData inputData = InputData();
+
   bool isButtonActive = false;
   late TextEditingController controller = TextEditingController();
   final nicknameController = TextEditingController(); // 닉네임 넣기
@@ -245,6 +272,10 @@ class _SignupPageState extends State<SignupPage> {
                           MaterialPageRoute(
                               builder: (context) => SetEmailPage()),
                         );
+                        setState(() {
+                          inputData.nickname = nicknameController.text;
+                          inputData.password = passwordController.text;
+                        });
                       }
                     : null,
                 child: Text(
