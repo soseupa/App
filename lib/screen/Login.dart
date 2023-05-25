@@ -11,11 +11,11 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-Future<String> login(String username, String password) async{
+Future<String> login(String email, String password) async{
   var url = Uri.parse(''); // Todo url 얻기
 
   var body = jsonEncode({
-    'username' : username,
+    'email' : email,
     'password' : password,
   });
 
@@ -41,12 +41,12 @@ class _LoginPageState extends State<LoginPage> {
   bool isButtonActive = false;
   bool _isButtonEnabled = false;
 
-  final nicknameController = TextEditingController();
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
   @override
   void dispose() {
-    nicknameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -54,13 +54,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    nicknameController.addListener(_updateButtonState);
+    emailController.addListener(_updateButtonState);
     passwordController.addListener(_updateButtonState);
   }
 
   void _updateButtonState() { // 버튼이 활성화
     setState(() {
-      _isButtonEnabled = nicknameController.text.isNotEmpty &&
+      _isButtonEnabled = emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty;
     });
   }
@@ -103,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: Text(
-                  '닉네임 입력',
+                  '이메일 입력',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
@@ -115,9 +115,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        controller: nicknameController,
+                        controller: emailController,
                         decoration: InputDecoration(
-                          hintText: '닉네임을 입력해주세요.',
+                          hintText: '이메일을 입력해주세요.',
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
