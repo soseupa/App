@@ -11,9 +11,9 @@ class SetEmailPage extends StatefulWidget {
   @override
   State<SetEmailPage> createState() => SetEmailPageState();
 }
-
 class SetEmailPageState extends State<SetEmailPage> {
-  late final InputData inputData;
+  User? inputData = InputData.inputData;
+
   bool isButtonActive = false;
   bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;
@@ -43,6 +43,37 @@ class SetEmailPageState extends State<SetEmailPage> {
     });
   }
 
+  Future<void> Signup(String nickname, String password, String email) async{
+    final String url = 'http://localhost:8080/user/signup';
+    final Map<String, String> requestData = {
+      'nickname' : nickname,
+      'password' : password,
+      'email' : email,
+    };
+
+    var body = jsonEncode({'nickname':nickname, 'password':password, 'email': email});
+    // API 호출
+    var response = await http.post(Uri.parse(url), body: body, headers : {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      // 회원가입 성공
+      print('회원가입이 성공적으로 완료되었습니다!');
+    } else {
+      // 회원가입 실패
+      print('회원가입에 실패하였습니다. 다시 시도해주세요.');
+    }
+  }
+
+  void _signUp() {
+    String nickname = inputData?.nickname ?? "";
+    String password = inputData?.password ?? "";
+    String email = emailController.text;
+
+    print(nickname);
+    print(password);
+
+    Signup(nickname, password, email);
+  }
+
   Future<void> sendEmail() async {
     var url = Uri.parse('http://localhost:8080/auth/email/check');
     var email = emailController.text;
@@ -62,6 +93,7 @@ class SetEmailPageState extends State<SetEmailPage> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -225,16 +257,16 @@ class SetEmailPageState extends State<SetEmailPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: _isButtonEnabled
-                    ? () {
+                onPressed: () {
+                  _isButtonEnabled;
+                  _signUp();
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => StartPage()),
                   );
                   setState(() => isButtonActive = false);
-                }
-                    : null,
+                },
                 child: Text(
                   "완료",
                   style: TextStyle(color: Colors.white),

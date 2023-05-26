@@ -12,34 +12,16 @@ class SignupPage extends StatefulWidget {
 }
 
 class InputData {
-  String nickname='';
-  String password='';
-  String email='';
+  static User? inputData;
 }
 
-/*Future<bool> signUp(String name, String email, String password) async {
-  var url = Uri.parse('');
-
-  var body = jsonEncode({
-    'name' : name,
-    'password' : password,
-    'email' : email,
-  });
-
-  //회원가입 요청 보내기
-  var response = await http.post(
-    url,
-    headers : {'Content-type' : 'application/json'},
-    body : body,
-  );
-} */
 
 class _SignupPageState extends State<SignupPage> {
   InputData inputData = InputData();
 
   bool isButtonActive = false;
   late TextEditingController controller = TextEditingController();
-  final nicknameController = TextEditingController(); // 닉네임 넣기
+  final TextEditingController nicknameController = TextEditingController(); // 닉네임 넣기
   final TextEditingController passwordController = TextEditingController(); // 비밀번호 넣기
   final TextEditingController passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
   final myController = TextEditingController();
@@ -71,6 +53,14 @@ class _SignupPageState extends State<SignupPage> {
 
   @override
   Widget build(BuildContext context) {
+
+    String nickname = nicknameController.text;
+    String password = passwordController.text;
+    User user = User(nickname : nickname, password : password);
+    InputData.inputData = user;
+
+    InputData inputData = InputData();
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -272,10 +262,6 @@ class _SignupPageState extends State<SignupPage> {
                           MaterialPageRoute(
                               builder: (context) => SetEmailPage()),
                         );
-                        setState(() {
-                          inputData.nickname = nicknameController.text;
-                          inputData.password = passwordController.text;
-                        });
                       }
                     : null,
                 child: Text(
@@ -296,4 +282,11 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
+}
+
+class User {
+  final String nickname;
+  final String password;
+
+  User({required this.nickname, required this.password});
 }
