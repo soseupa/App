@@ -15,11 +15,11 @@ class InputData {
   static User? inputData;
 }
 
-
 class _SignupPageState extends State<SignupPage> {
   InputData inputData = InputData();
 
   bool isButtonActive = false;
+  bool _checknickname = false;
   late TextEditingController controller = TextEditingController();
   final TextEditingController nicknameController = TextEditingController(); // 닉네임 넣기
   final TextEditingController passwordController = TextEditingController(); // 비밀번호 넣기
@@ -45,18 +45,45 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _updateButtonState() { // 버튼이 활성화
+    print(_checknickname);
     setState(() {
-      _isButtonEnabled = nicknameController.text.isNotEmpty &&
+      _isButtonEnabled = _checknickname && nicknameController.text.isNotEmpty &&
           passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && passwordController.text == passwordCheckController.text;
     });
   }
 
+  Future<void> checkNicknameDulication() async {
+    final String nickname = nicknameController.text;
+    final String url = 'http://localhost:8080/user/check/' + nickname;
+
+    final response = await http.get(
+      Uri.parse(url),
+    );
+    print(nickname);
+
+    if(response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      if(data) {
+        _checknickname = false;
+        print('사용 가능하지않음');
+      }
+      else {
+        _checknickname = true;
+        print('닉네임 중복 아님');
+      }
+    }
+    else {
+      _checknickname = false;
+      print('닉네임 중복임');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     String nickname = nicknameController.text;
     String password = passwordController.text;
-    User user = User(nickname : nickname, password : password);
+    User user = User(nickname: nickname, password: password);
     InputData.inputData = user;
 
     InputData inputData = InputData();
@@ -85,69 +112,69 @@ class _SignupPageState extends State<SignupPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top:42.0),
+            padding: const EdgeInsets.only(top: 42.0),
             child: Center(
               child: Image.asset('assets/image/main_logo.png',
                   width: 109, height: 117),
             ),
           ),
           Padding( // progress bar
-              padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    child: Center(
-                      child: Text( '1',
-                        style: TextStyle(
-                          fontSize:16,
-                          color: Color(0xffFF67B0),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    height: 39,
-                    width: 39,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(400),
-                      border: Border.all(
-                        width: 4,
+            padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  child: Center(
+                    child: Text('1',
+                      style: TextStyle(
+                        fontSize: 16,
                         color: Color(0xffFF67B0),
-                      ),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0xfFF00A8).withOpacity(.30),
-                          spreadRadius: 3,
-                          blurRadius: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 4,
-                    width: 68,
-                    color: Color(0xffFF67B0),
-                  ),
-                  Container(
-                    child: Center(
-                      child: Text( '2',
-                        style: TextStyle(
-                          fontSize:16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    height: 39,
-                    width: 39,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(400),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    border: Border.all(
+                      width: 4,
                       color: Color(0xffFF67B0),
                     ),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Color(0xfFF00A8).withOpacity(.30),
+                        spreadRadius: 3,
+                        blurRadius: 5,
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Container(
+                  height: 4,
+                  width: 68,
+                  color: Color(0xffFF67B0),
+                ),
+                Container(
+                  child: Center(
+                    child: Text('2',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  height: 39,
+                  width: 39,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(400),
+                    color: Color(0xffFF67B0),
+                  ),
+                ),
+              ],
+            ),
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,6 +195,10 @@ class _SignupPageState extends State<SignupPage> {
                       height: 48,
                       child: TextField(
                         controller: nicknameController, // 닉네임 저장
+                        onChanged: (value) {
+                          // 입력 값이 변경될 때마다 유효성 검사를 실행합니다.
+                          checkNicknameDulication();
+                        },
                         decoration: InputDecoration(
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
@@ -197,7 +228,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        controller: passwordController,// 비밀번호 저장
+                        controller: passwordController, // 비밀번호 저장
                         obscureText: true,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요.',
@@ -228,7 +259,7 @@ class _SignupPageState extends State<SignupPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        controller : passwordCheckController,
+                        controller: passwordCheckController,
                         focusNode: _confirmPasswordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
@@ -257,12 +288,12 @@ class _SignupPageState extends State<SignupPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SetEmailPage()),
-                        );
-                      }
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SetEmailPage()),
+                  );
+                }
                     : null,
                 child: Text(
                   "다음",
