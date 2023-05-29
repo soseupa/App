@@ -45,10 +45,20 @@ class _SignupPageState extends State<SignupPage> {
   }
 
   void _updateButtonState() { // 버튼이 활성화
-    print(_checknickname);
     setState(() {
       _isButtonEnabled = _checknickname && nicknameController.text.isNotEmpty &&
           passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && passwordController.text == passwordCheckController.text;
+    });
+  }
+
+  bool _passwordmatch = true;
+  void CheckPasswordMatch() {
+    String password = passwordController.text;
+    String confirmpassword = passwordCheckController.text;
+
+    setState(()
+    {
+      _passwordmatch = password == confirmpassword;
     });
   }
 
@@ -239,6 +249,9 @@ class _SignupPageState extends State<SignupPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
+                        onChanged: (value) {
+                          CheckPasswordMatch();
+                        },
                       ),
                     ),
                   ],
@@ -253,19 +266,22 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     SizedBox(
                       width: 360,
-                      height: 48,
                       child: TextField(
                         controller: passwordCheckController,
                         focusNode: _confirmPasswordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                           hintText: '비밀번호를 입력해주세요.',
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide.none,
+                          errorStyle: TextStyle(
+                            fontSize: 11,
+                          ),
+                          errorText: ! _passwordmatch ? '비밀번호가 일치하지않아요.' : null,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 2.0),
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           border: OutlineInputBorder(
@@ -275,6 +291,9 @@ class _SignupPageState extends State<SignupPage> {
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
                         ),
+                        onChanged: (value) {
+                          CheckPasswordMatch();
+                        },
                       ),
                     ),
                   ],
