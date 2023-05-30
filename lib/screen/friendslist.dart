@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class FriendsListPage extends StatefulWidget {
   final List<friendListUserInfoModel> friendsList;
@@ -205,14 +208,46 @@ class _FriendsListPageState extends State<FriendsListPage> {
   // }
 
   SizedBox Search() {
+    Future<void> _searchEmail(final email) async {
+      final String url = 'http://localhost:8080/auth/email/' + email;
+      // url 정확하게 저장됨
+
+      final response = await http.get(
+        Uri.parse(url),
+      );
+
+      print(response.statusCode);
+      if(response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+
+        if(data) {
+          print('서버연결x');
+        }
+        else {
+          print('서버연결o');
+        }
+      }
+      else {
+        print('서버연결실패');
+      }
+    }
+
+    final emailController = TextEditingController();
     return SizedBox(
       width: 400,
       height: 50,
       child: TextFormField(
+        controller: emailController,
         decoration: InputDecoration(
+            hintText: '친구의 이메일을 검색해보세요.',
+            hintStyle: TextStyle(
+              color: Color(0xffDEDEDE),
+            ),
             border: InputBorder.none,
             suffixIcon: InkWell(
-              onTap: () {},
+              onTap: () {
+                _searchEmail(emailController.text);
+              },
               child: Icon(
                 Icons.search_rounded,
                 color: Color(0xffFF00A8),
@@ -223,6 +258,12 @@ class _FriendsListPageState extends State<FriendsListPage> {
               borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 color: Color(0xffFCD8E9),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                  color: Color(0xffFCD8E9),
               ),
             ),
             filled: true,
