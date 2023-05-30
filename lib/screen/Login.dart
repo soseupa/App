@@ -28,6 +28,9 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // HTTP POST 요청 보내기
       var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final String accessToken = responseData['accessToken'];
+      print(accessToken);
 
       // 서버로부터 받은 응답 처리
       if (response.statusCode == 200 && password.length>0) {

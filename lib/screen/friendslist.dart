@@ -210,25 +210,27 @@ class _FriendsListPageState extends State<FriendsListPage> {
   SizedBox Search() {
     Future<void> _searchEmail(final email) async {
       final String url = 'http://localhost:8080/auth/email/' + email;
+      final String authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjA1dG5ndXM5NUBnbWFpbC5jb20iLCJpYXQiOjE2ODU0NDUxOTksImV4cCI6MTY4NTQ1MzgzOX0.g-V2anu9phGC75atpmhYvzMjN5tCuburahyOLTif-nk'; // 토큰 값 적으면 될 듯
       // url 정확하게 저장됨
 
-      final response = await http.get(
-        Uri.parse(url),
-      );
+      try {
+        Map<String, String> headers = {
+          'Authorization': 'Bearer $authToken', // 'Bearer' 접두사와 토큰 값을 헤더에 포함
+          'Content-Type': 'application/json', // 다른 필요한 헤더도 추가할 수 있음
+        };
 
-      print(response.statusCode);
-      if(response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        final response = await http.get(Uri.parse(url), headers: headers);
 
-        if(data) {
-          print('서버연결x');
+        // 응답 처리
+        if (response.statusCode == 200) {
+          // 성공적인 응답 처리
+          print('요청이 성공했습니다.');
+        } else {
+          // 오류 응답 처리
+          print('오류 응답: ${response.statusCode}');
         }
-        else {
-          print('서버연결o');
-        }
-      }
-      else {
-        print('서버연결실패');
+      } catch (e) {
+        print('요청 중 오류 발생: $e');
       }
     }
 
