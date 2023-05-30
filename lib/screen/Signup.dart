@@ -19,7 +19,7 @@ class _SignupPageState extends State<SignupPage> {
   InputData inputData = InputData();
 
   bool isButtonActive = false;
-  bool _checknickname = false;
+  bool _checknickname = true;
   late TextEditingController controller = TextEditingController();
   final TextEditingController nicknameController = TextEditingController(); // 닉네임 넣기
   final TextEditingController passwordController = TextEditingController(); // 비밀번호 넣기
@@ -74,7 +74,8 @@ class _SignupPageState extends State<SignupPage> {
     if(response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      if(data) {
+      if(data && nickname.length<=0) {
+        print(nickname.length);
         _checknickname = false;
         print('사용 가능하지않음');
       }
@@ -84,6 +85,7 @@ class _SignupPageState extends State<SignupPage> {
       }
     }
     else {
+      print(nickname.length);
       _checknickname = false;
       print('닉네임 중복임');
     }
@@ -198,11 +200,9 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Container(
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     SizedBox(
                       width: 360,
-                      height: 48,
                       child: TextField(
                         controller: nicknameController, // 닉네임 저장
                         onChanged: (value) {
@@ -210,9 +210,15 @@ class _SignupPageState extends State<SignupPage> {
                           checkNicknameDulication();
                         },
                         decoration: InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(14.0),
+                          ),
+                          errorText: ! _checknickname ? '닉네임이 중복되었어요.' : null,
+                          errorBorder: OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.red, width: 2.0),
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           filled: true,
