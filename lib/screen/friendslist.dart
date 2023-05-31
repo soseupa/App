@@ -4,6 +4,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'Login.dart';
 
 
 class FriendsListPage extends StatefulWidget {
@@ -17,6 +18,8 @@ class FriendsListPage extends StatefulWidget {
 }
 
 class _FriendsListPageState extends State<FriendsListPage> {
+  Token? inputData = InputData.inputData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -209,28 +212,22 @@ class _FriendsListPageState extends State<FriendsListPage> {
 
   SizedBox Search() {
     Future<void> _searchEmail(final email) async {
-      final String url = 'http://localhost:8080/auth/email/' + email;
-      final String authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjA1dG5ndXM5NUBnbWFpbC5jb20iLCJpYXQiOjE2ODU0NDUxOTksImV4cCI6MTY4NTQ1MzgzOX0.g-V2anu9phGC75atpmhYvzMjN5tCuburahyOLTif-nk'; // 토큰 값 적으면 될 듯
-      // url 정확하게 저장됨
+      String token = inputData?.token ?? "";
+      print(token);
 
-      try {
-        Map<String, String> headers = {
-          'Authorization': 'Bearer $authToken', // 'Bearer' 접두사와 토큰 값을 헤더에 포함
-          'Content-Type': 'application/json', // 다른 필요한 헤더도 추가할 수 있음
-        };
-
-        final response = await http.get(Uri.parse(url), headers: headers);
-
-        // 응답 처리
-        if (response.statusCode == 200) {
-          // 성공적인 응답 처리
-          print('요청이 성공했습니다.');
-        } else {
-          // 오류 응답 처리
-          print('오류 응답: ${response.statusCode}');
-        }
-      } catch (e) {
-        print('요청 중 오류 발생: $e');
+      final url = Uri.parse('http://localhost:8080/auth/email/' + email);
+      final headers = {'Authorization': 'Bearer $token'};
+      final response = await http.get(url, headers: headers);
+      // 응답 처리 로직 작성
+      if (response.statusCode == 200) {
+        // 요청이 성공했을 경우
+        print('요청이 성공했습니다.');
+        print('응답 본문: ${response.body}');
+      } else {
+        // 요청이 실패했을 경우
+        print('요청이 실패했습니다.');
+        print('응답 상태 코드: ${response.statusCode}');
+        print('응답 본문: ${response.body}');
       }
     }
 

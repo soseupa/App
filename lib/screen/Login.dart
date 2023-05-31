@@ -11,7 +11,12 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+class InputData {
+  static Token? inputData;
+}
+
 class _LoginPageState extends State<LoginPage> {
+  InputData inputData = InputData();
   late TextEditingController controller;
   bool isButtonActive = false;
   bool _isButtonEnabled = false;
@@ -30,6 +35,8 @@ class _LoginPageState extends State<LoginPage> {
       var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
       final Map<String, dynamic> responseData = json.decode(response.body);
       final String accessToken = responseData['accessToken'];
+      Token token = Token(token: accessToken);
+      InputData.inputData = token;
       print(accessToken);
 
       // 서버로부터 받은 응답 처리
@@ -208,4 +215,9 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class Token {
+  final String token;
+  Token({required this.token});
 }

@@ -98,8 +98,6 @@ class _SignupPageState extends State<SignupPage> {
     User user = User(nickname: nickname, password: password);
     InputData.inputData = user;
 
-    InputData inputData = InputData();
-
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
