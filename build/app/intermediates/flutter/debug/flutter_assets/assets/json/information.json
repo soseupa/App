@@ -1,0 +1,22 @@
+{
+  "length" : 4,
+  "friend": [
+    {
+      "name": "조수현",
+      "email": "05tngus95@gmail.com"
+    },
+    {
+      "name": "김혜린",
+      "email": "hyehye@gmail.com"
+    },
+    {
+      "name": "유나은",
+      "email": "yyueyyu@gmail.com"
+    },
+    {
+      "name": "김한울",
+      "email": "hanul@gmail.com"
+    }
+  ]
+}
+

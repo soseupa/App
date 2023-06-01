@@ -48,7 +48,7 @@ class SetEmailPageState extends State<SetEmailPage> {
   }
 
   Future<void> Signup(String nickname, String password, String email) async {
-    final String url = 'http://34.64.252.212:8080/user/signup';
+    final String url = 'http://34.64.137.179:8080/user/signup';
     final Map<String, String> requestData = {
       'nickname': nickname,
       'password': password,
@@ -81,7 +81,7 @@ class SetEmailPageState extends State<SetEmailPage> {
   }
 
   Future<void> sendEmail() async {
-    var url = Uri.parse('http://34.64.252.212:8080/auth/email/check');
+    var url = Uri.parse('http://34.64.137.179:8080/auth/email/check');
     var email = emailController.text;
 
     var body = jsonEncode({'email': email});

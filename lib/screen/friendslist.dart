@@ -214,7 +214,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       String token = inputData?.token ?? "";
       print(token);
 
-      final url = Uri.parse('http://34.64.252.212:8080/auth/email/' + email);
+      final url = Uri.parse('http://34.64.137.179:8080/auth/email/' + email);
       final headers = {'Authorization': 'Bearer $token'};
       final response = await http.get(url, headers: headers);
       // 응답 처리 로직 작성
