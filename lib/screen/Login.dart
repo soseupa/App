@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
         print("로그인실패");
       }
     } catch (error) {
+      logincheck = false;
       print('로그인 요청 실패: $error');
     }
   }

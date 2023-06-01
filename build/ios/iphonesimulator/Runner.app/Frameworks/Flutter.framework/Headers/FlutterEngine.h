@@ -56,7 +56,7 @@ extern NSString* const FlutterDefaultInitialRoute;
  * One of these methods must be invoked before calling `-setViewController:`.
  */
 FLUTTER_DARWIN_EXPORT
-@interface FlutterEngine : NSObject <FlutterPluginRegistry>
+@interface FlutterEngine : NSObject <FlutterTextureRegistry, FlutterPluginRegistry>
 
 /**
  * Default initializer for a FlutterEngine.
@@ -410,34 +410,19 @@ FLUTTER_DARWIN_EXPORT
 @property(nonatomic, readonly) FlutterBasicMessageChannel* keyEventChannel;
 
 /**
- * The depcreated `NSURL` of the Dart VM Service for the service isolate.
+ * The `NSURL` of the observatory for the service isolate.
  *
  * This is only set in debug and profile runtime modes, and only after the
- * Dart VM Service is ready. In release mode or before the Dart VM Service has
+ * observatory service is ready. In release mode or before the observatory has
  * started, it returns `nil`.
  */
-@property(nonatomic, readonly, nullable)
-    NSURL* observatoryUrl FLUTTER_DEPRECATED("Use vmServiceUrl instead");
-
-/**
- * The `NSURL` of the Dart VM Service for the service isolate.
- *
- * This is only set in debug and profile runtime modes, and only after the
- * Dart VM Service is ready. In release mode or before the Dart VM Service has
- * started, it returns `nil`.
- */
-@property(nonatomic, readonly, nullable) NSURL* vmServiceUrl;
+@property(nonatomic, readonly, nullable) NSURL* observatoryUrl;
 
 /**
  * The `FlutterBinaryMessenger` associated with this FlutterEngine (used for communicating with
  * channels).
  */
 @property(nonatomic, readonly) NSObject<FlutterBinaryMessenger>* binaryMessenger;
-
-/**
- * The `FlutterTextureRegistry` associated with this FlutterEngine (used to register textures).
- */
-@property(nonatomic, readonly) NSObject<FlutterTextureRegistry>* textureRegistry;
 
 /**
  * The UI Isolate ID of the engine.
