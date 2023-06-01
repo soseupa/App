@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/calendar.dart';
-
 import 'Start_page.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -10,17 +11,51 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
+class InputData {
+  static Token? inputData;
+}
+
 class _LoginPageState extends State<LoginPage> {
+  InputData inputData = InputData();
   late TextEditingController controller;
   bool isButtonActive = false;
   bool _isButtonEnabled = false;
-
-  final nicknameController = TextEditingController();
+  bool logincheck = true;
+  final emailController = TextEditingController();
   final passwordController = TextEditingController();
+
+  Future<void> Login(String email, String password) async{
+    email = emailController.text;
+    password = passwordController.text;
+    var url = Uri.parse('http://localhost:8080/login'); // Todo url 얻기
+    var body = jsonEncode({'email': email, 'password':password});
+
+    try {
+      // HTTP POST 요청 보내기
+      var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final String accessToken = responseData['accessToken'];
+      Token token = Token(token: accessToken);
+      InputData.inputData = token;
+      print(accessToken);
+
+      // 서버로부터 받은 응답 처리
+      if (response.statusCode == 200 && password.length>0) {
+        logincheck = true;
+        print("로그인성공");
+        final responseData = jsonDecode(response.body);
+      } else {
+        logincheck = false;
+        print("로그인실패");
+      }
+    } catch (error) {
+      print('로그인 요청 실패: $error');
+    }
+  }
 
   @override
   void dispose() {
-    nicknameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -28,13 +63,13 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    nicknameController.addListener(_updateButtonState);
+    emailController.addListener(_updateButtonState);
     passwordController.addListener(_updateButtonState);
   }
 
   void _updateButtonState() { // 버튼이 활성화
     setState(() {
-      _isButtonEnabled = nicknameController.text.isNotEmpty &&
+      _isButtonEnabled = emailController.text.isNotEmpty &&
           passwordController.text.isNotEmpty;
     });
   }
@@ -77,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 12.0),
                 child: Text(
-                  '닉네임 입력',
+                  '이메일 입력',
                   style: TextStyle(fontSize: 16),
                 ),
               ),
@@ -89,9 +124,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                        controller: nicknameController,
+                        controller: emailController,
                         decoration: InputDecoration(
-                          hintText: '닉네임을 입력해주세요.',
+                          hintText: '이메일을 입력해주세요.',
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
@@ -117,19 +152,28 @@ class _LoginPageState extends State<LoginPage> {
                   children: <Widget>[
                     SizedBox(
                       width: 360,
-                      height: 48,
                       child: TextField(
-                        obscureText: true,
-                        decoration: InputDecoration(
-                          hintText: '비밀번호를 입력해주세요.',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(14.0),
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                            hintText: '비밀번호를 입력해주세요.',
+                            errorText: ! logincheck ? '비밀번호가 틀렸습니다.' : null,
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 2.0),
+                              borderRadius: BorderRadius.circular(14.0),
+                            ),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(14.0),
+                            ),
+                            filled: true,
+                            fillColor: Color(0xffF5F5F5),
                           ),
-                          filled: true,
-                          fillColor: Color(0xffF5F5F5),
-                        ),
-                        controller: passwordController,
+                          controller: passwordController,
+                          onChanged: (value) {
+                            Login(emailController.text, passwordController.text);
+                            _updateButtonState();
+                          }
                       ),
                     ),
                   ],
@@ -143,12 +187,15 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MapPage()),
-                        );
-                        setState(() => isButtonActive = false);
-                      }
+                  Login(emailController.text, passwordController.text);
+                  if(logincheck) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MapPage()),
+                    );
+                  }
+                  setState(() => isButtonActive = false);
+                }
                     : null,
                 child: Text(
                   "완료",
@@ -168,4 +215,9 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+class Token {
+  final String token;
+  Token({required this.token});
 }

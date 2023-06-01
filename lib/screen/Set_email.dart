@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Signup.dart';
-import 'dart:convert';
+import 'package:http/http.dart' as http;
+
 import 'Start_page.dart';
 
 class SetEmailPage extends StatefulWidget {
@@ -13,9 +14,12 @@ class SetEmailPage extends StatefulWidget {
 }
 
 class SetEmailPageState extends State<SetEmailPage> {
+  User? inputData = InputData.inputData;
+
   bool isButtonActive = false;
   bool _isButtonEnabled = false; // 버튼 유효성
   late TextEditingController controller;
+  late String receivedCode;
 
   final emailController = TextEditingController();
   final verificationCodeController = TextEditingController();
@@ -34,11 +38,46 @@ class SetEmailPageState extends State<SetEmailPage> {
     verificationCodeController.addListener(_updateButtonState);
   }
 
-  void _updateButtonState() { // 버튼이 활성화
+  void _updateButtonState() {
+    // 버튼이 활성화
     setState(() {
       _isButtonEnabled = emailController.text.isNotEmpty &&
-          verificationCodeController.text.isNotEmpty;
+          verificationCodeController.text.isNotEmpty &&
+          receivedCode == verificationCodeController.text;
     });
+  }
+
+  Future<void> Signup(String nickname, String password, String email) async {
+    final String url = 'http://localhost:8080/user/signup';
+    final Map<String, String> requestData = {
+      'nickname': nickname,
+      'password': password,
+      'email': email,
+    };
+
+    var body = jsonEncode(
+        {'nickname': nickname, 'password': password, 'email': email});
+    // API 호출
+    var response = await http.post(Uri.parse(url),
+        body: body, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      // 회원가입 성공
+      print('회원가입이 성공적으로 완료되었습니다!');
+    } else {
+      // 회원가입 실패
+      print('회원가입에 실패하였습니다. 다시 시도해주세요.');
+    }
+  }
+
+  void _signUp() {
+    String nickname = inputData?.nickname ?? "";
+    String password = inputData?.password ?? "";
+    String email = emailController.text;
+
+    print(nickname);
+    print(password);
+
+    Signup(nickname, password, email);
   }
 
   Future<void> sendEmail() async {
@@ -47,11 +86,13 @@ class SetEmailPageState extends State<SetEmailPage> {
 
     var body = jsonEncode({'email': email});
 
-    var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
-    if(response.statusCode == 200) {
-      print("이메일 전송 성공");
-    }
-    else {
+    var response = await http
+        .post(url, body: body, headers: {'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      print("이메일 전송 성공 ");
+      print(response.body);
+      receivedCode = response.body;
+    } else {
       print("이메일 전송 실패");
     }
   }
@@ -82,22 +123,24 @@ class SetEmailPageState extends State<SetEmailPage> {
       body: Column(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(top:42.0),
+            padding: const EdgeInsets.only(top: 42.0),
             child: Center(
               child: Image.asset('assets/image/main_logo.png',
                   width: 109, height: 117),
             ),
           ),
-          Padding( // progress bar
+          Padding(
+            // progress bar
             padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   child: Center(
-                    child: Text( '1',
+                    child: Text(
+                      '1',
                       style: TextStyle(
-                        fontSize:16,
+                        fontSize: 16,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
@@ -117,9 +160,10 @@ class SetEmailPageState extends State<SetEmailPage> {
                 ),
                 Container(
                   child: Center(
-                    child: Text( '2',
+                    child: Text(
+                      '2',
                       style: TextStyle(
-                        fontSize:16,
+                        fontSize: 16,
                         color: Color(0xffFF67B0),
                         fontWeight: FontWeight.bold,
                       ),
@@ -173,10 +217,13 @@ class SetEmailPageState extends State<SetEmailPage> {
                           ),
                           filled: true,
                           fillColor: Color(0xffF5F5F5),
-                          suffixIcon:
-                          TextButton(
+                          suffixIcon: TextButton(
                             onPressed: sendEmail,
-                            child: Text('보내기', style: TextStyle(color: Color(0xffFF419C),),
+                            child: Text(
+                              '보내기',
+                              style: TextStyle(
+                                color: Color(0xffFF419C),
+                              ),
                             ),
                           ),
                         ),
@@ -200,16 +247,16 @@ class SetEmailPageState extends State<SetEmailPage> {
                       width: 360,
                       height: 48,
                       child: TextField(
-                          decoration: InputDecoration(
-                            hintText: '이메일 인증코드를 입력해주세요.',
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(14.0),
-                            ),
-                            filled: true,
-                            fillColor: Color(0xffF5F5F5),
+                        decoration: InputDecoration(
+                          hintText: '이메일 인증코드를 입력해주세요.',
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(14.0),
                           ),
-                          controller: verificationCodeController
+                          filled: true,
+                          fillColor: Color(0xffF5F5F5),
+                        ),
+                        controller: verificationCodeController,
                       ),
                     ),
                   ],
@@ -221,16 +268,17 @@ class SetEmailPageState extends State<SetEmailPage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 54.0),
               child: ElevatedButton(
-                onPressed: _isButtonEnabled
-                    ? () {
+                onPressed: () {
+                  print(_isButtonEnabled);
+                  _isButtonEnabled;
+                  _signUp();
+
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => StartPage()),
+                    MaterialPageRoute(builder: (context) => StartPage()),
                   );
                   setState(() => isButtonActive = false);
-                }
-                    : null,
+                },
                 child: Text(
                   "완료",
                   style: TextStyle(color: Colors.white),

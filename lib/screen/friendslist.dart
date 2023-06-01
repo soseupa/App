@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:http/http.dart' as http;
+
+import 'Login.dart';
 
 class FriendsListPage extends StatefulWidget {
   final List<friendListUserInfoModel> friendsList;
@@ -14,6 +17,8 @@ class FriendsListPage extends StatefulWidget {
 }
 
 class _FriendsListPageState extends State<FriendsListPage> {
+  Token? inputData = InputData.inputData;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -205,14 +210,42 @@ class _FriendsListPageState extends State<FriendsListPage> {
   // }
 
   SizedBox Search() {
+    Future<void> _searchEmail(final email) async {
+      String token = inputData?.token ?? "";
+      print(token);
+
+      final url = Uri.parse('http://localhost:8080/auth/email/' + email);
+      final headers = {'Authorization': 'Bearer $token'};
+      final response = await http.get(url, headers: headers);
+      // 응답 처리 로직 작성
+      if (response.statusCode == 200) {
+        // 요청이 성공했을 경우
+        print('요청이 성공했습니다.');
+        print('응답 본문: ${response.body}');
+      } else {
+        // 요청이 실패했을 경우
+        print('요청이 실패했습니다.');
+        print('응답 상태 코드: ${response.statusCode}');
+        print('응답 본문: ${response.body}');
+      }
+    }
+
+    final emailController = TextEditingController();
     return SizedBox(
       width: 400,
       height: 50,
       child: TextFormField(
+        controller: emailController,
         decoration: InputDecoration(
+            hintText: '친구의 이메일을 검색해보세요.',
+            hintStyle: TextStyle(
+              color: Color(0xffDEDEDE),
+            ),
             border: InputBorder.none,
             suffixIcon: InkWell(
-              onTap: () {},
+              onTap: () {
+                _searchEmail(emailController.text);
+              },
               child: Icon(
                 Icons.search_rounded,
                 color: Color(0xffFF00A8),
@@ -220,6 +253,12 @@ class _FriendsListPageState extends State<FriendsListPage> {
               ),
             ),
             enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(10)),
+              borderSide: BorderSide(
+                color: Color(0xffFCD8E9),
+              ),
+            ),
+            focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(10)),
               borderSide: BorderSide(
                 color: Color(0xffFCD8E9),
