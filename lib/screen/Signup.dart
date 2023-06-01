@@ -66,7 +66,7 @@ class _SignupPageState extends State<SignupPage> {
 
   Future<void> checkNicknameDulication() async {
     final String nickname = nicknameController.text;
-    final String url = 'http://localhost:8080/user/check/' + nickname;
+    final String url = 'http://34.64.252.212:8080/user/check/' + nickname;
 
     final response = await http.get(
       Uri.parse(url),

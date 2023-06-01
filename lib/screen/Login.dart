@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> Login(String email, String password) async{
     email = emailController.text;
     password = passwordController.text;
-    var url = Uri.parse('http://localhost:8080/login'); // Todo url 얻기
+    var url = Uri.parse('http://34.64.252.212:8080/login'); // Todo url 얻기
     var body = jsonEncode({'email': email, 'password':password});
 
     try {
