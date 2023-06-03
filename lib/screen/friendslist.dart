@@ -175,8 +175,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
         showContainer = true;
         searchedNickname = nickname;
       });
-
-
     } else {
       // 요청이 실패했을 경우
       print('요청이 실패했습니다.');
@@ -207,7 +205,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       print("친구요쳥 성공");
       print(response.body);
     }
-    if(response.statusCode == 403){
+    else if(response.statusCode == 403){
       print("이미 친구");
     }
     else {
