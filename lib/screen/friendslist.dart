@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -18,6 +20,9 @@ class FriendsListPage extends StatefulWidget {
 
 class _FriendsListPageState extends State<FriendsListPage> {
   Token? inputData = InputData.inputData;
+  String searchedNickname = '';
+  String searchedEmail = '';
+  bool showContainer = false;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
           children: [
             Search(),
             alreadyFriend(),
-            NotFriend(),
+            if(showContainer) NotFriend(),
             // HavenoFriend(),
           ],
         ),
@@ -148,6 +153,38 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
 
+  Future<void> _searchEmail(final email) async {
+    String token = inputData?.token ?? "";
+    print(token);
+
+    final url = Uri.parse('http://34.64.137.179:8080/auth/email/' + email);
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
+    // 응답 처리 로직 작성
+    if (response.statusCode == 200) {
+      // 요청이 성공했을 경우
+      print('요청이 성공했습니다.');
+      print('응답 본문: $responseBody');
+      final nickname = decodeResponseBody['nickname'];
+      final email = decodeResponseBody['email'];
+      print('닉네임: $nickname');
+      print('이메일: $email');
+      setState(() {
+        showContainer = true;
+        searchedNickname = nickname;
+      });
+
+
+    } else {
+      // 요청이 실패했을 경우
+      print('요청이 실패했습니다.');
+      print('응답 상태 코드: ${response.statusCode}');
+
+    }
+  }
+
   Padding NotFriend() {
     return Padding(
       padding: const EdgeInsets.only(top: 18.0),
@@ -168,7 +205,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(left: 18.0),
-                    child: Text('${'박다은'}',
+                    child: Text('$searchedNickname',
                         style: TextStyle(
                             fontSize: 18,
                             fontFamily: 'NotoSansKR',
@@ -185,7 +222,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(right: 5.0),
-                      child: Text('dadadada@gmail.com',
+                      child: Text('$searchedEmail',
                           style: TextStyle(
                               fontSize: 17,
                               fontFamily: 'NotoSansKR',
@@ -193,7 +230,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                               fontWeight: FontWeight.w300)),
                     ),
                     InkWell(
-                        onTap: () => _rotateDialog('박다은'),
+                        onTap: () => _rotateDialog('$searchedNickname'),
                         child: Icon(Icons.add))
                   ],
                 ),
@@ -210,26 +247,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
   // }
 
   SizedBox Search() {
-    Future<void> _searchEmail(final email) async {
-      String token = inputData?.token ?? "";
-      print(token);
-
-      final url = Uri.parse('http://34.64.137.179:8080/auth/email/' + email);
-      final headers = {'Authorization': 'Bearer $token'};
-      final response = await http.get(url, headers: headers);
-      // 응답 처리 로직 작성
-      if (response.statusCode == 200) {
-        // 요청이 성공했을 경우
-        print('요청이 성공했습니다.');
-        print('응답 본문: ${response.body}');
-      } else {
-        // 요청이 실패했을 경우
-        print('요청이 실패했습니다.');
-        print('응답 상태 코드: ${response.statusCode}');
-        print('응답 본문: ${response.body}');
-      }
-    }
-
     final emailController = TextEditingController();
     return SizedBox(
       width: 400,
@@ -245,6 +262,10 @@ class _FriendsListPageState extends State<FriendsListPage> {
             suffixIcon: InkWell(
               onTap: () {
                 _searchEmail(emailController.text);
+                setState(() {
+                  searchedEmail = emailController.text;
+                  searchedNickname;
+                });
               },
               child: Icon(
                 Icons.search_rounded,
@@ -317,15 +338,15 @@ class _FriendsListPageState extends State<FriendsListPage> {
                             fontFamily: 'NotoSansKR',
                             fontWeight: FontWeight.w600),
                         children: const [
-                      TextSpan(
-                          text: '님께 친구 요청을 보내시겠어요?\n',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'NotoSansKR',
-                            fontSize: 17,
-                          )),
-                    ])),
+                          TextSpan(
+                              text: '님께 친구 요청을 보내시겠어요?\n',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: 'NotoSansKR',
+                                fontSize: 17,
+                              )),
+                        ])),
                 const Center(
                   child: Text('한 번 건 친구 요청은 취소가 불가능합니다.',
                       style: TextStyle(
@@ -413,15 +434,15 @@ class _FriendsListPageState extends State<FriendsListPage> {
                               fontFamily: 'NotoSansKR',
                               fontWeight: FontWeight.w600),
                           children: const [
-                        TextSpan(
-                            text: '님과 친구입니다!',
-                            style: TextStyle(
-                              color: Colors.black,
-                              fontWeight: FontWeight.w400,
-                              fontFamily: 'NotoSansKR',
-                              fontSize: 17,
-                            )),
-                      ])),
+                            TextSpan(
+                                text: '님과 친구입니다!',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'NotoSansKR',
+                                  fontSize: 17,
+                                )),
+                          ])),
                 ),
               ],
             ),
