@@ -35,7 +35,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Search(),
-            alreadyFriend(),
+            if(showContainer==false)alreadyFriend(),
             if(showContainer) NotFriend(),
             // HavenoFriend(),
           ],
@@ -185,6 +185,38 @@ class _FriendsListPageState extends State<FriendsListPage> {
     }
   }
 
+  Future<void> sendFriendRequest(String friendEmail) async {
+    String token = inputData?.token ?? "";
+    var url = 'http://34.64.137.179:8080/friend/request';
+    Map<String, dynamic> requestData = {
+      'email': friendEmail,
+    };
+
+    // 데이터를 JSON 형태로 변환
+    String requestBody = jsonEncode(requestData);
+
+    // POST 요청 생성
+    var response = await http.post(
+      Uri.parse(url),
+      body: requestBody,
+      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+    );
+
+    if (response.statusCode == 200) {
+      // 요청이 성공적으로 보내졌을 경우
+      print("친구요쳥 성공");
+      print(response.body);
+    }
+    if(response.statusCode == 403){
+      print("이미 친구");
+    }
+    else {
+      // 요청이 실패했을 경우
+      print("친구요청 실패");
+      print('응답 상태 코드: ${response.statusCode}');
+    }
+  }
+
   Padding NotFriend() {
     return Padding(
       padding: const EdgeInsets.only(top: 18.0),
@@ -230,7 +262,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                               fontWeight: FontWeight.w300)),
                     ),
                     InkWell(
-                        onTap: () => _rotateDialog('$searchedNickname'),
+                        onTap: () => _rotateDialog('$searchedNickname', '$searchedEmail'),
                         child: Icon(Icons.add))
                   ],
                 ),
@@ -305,7 +337,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                 fontWeight: FontWeight.w500)));
   }
 
-  void _rotateDialog(String name) {
+  void _rotateDialog(String name, String friendEmail) {
     showAnimatedDialog(
         context: context,
         barrierDismissible: true,
@@ -370,6 +402,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                           elevation: 0,
                           fixedSize: Size(130, 30)),
                       onPressed: () {
+                        sendFriendRequest(friendEmail);
                         Navigator.pop(context);
                       },
                       child: const Text("확인"),
