@@ -16,6 +16,8 @@ class _NoticePageState extends State<NoticePage> {
   Token? inputData = InputData.inputData;
   String nickname = '';
   String email = '';
+  int length = 0;
+  List<dynamic> requestList = [];
 
   Future<void> requestFriendlist() async {
     String token = inputData?.token ?? "";
@@ -25,7 +27,8 @@ class _NoticePageState extends State<NoticePage> {
     final response = await http.get(url, headers: headers);
     final responseBody = utf8.decode(response.bodyBytes);
     final values = json.decode(responseBody);
-    List<dynamic> requestList = values['findFriendRequestResponseList'];
+    requestList = values['findFriendRequestResponseList'];
+    length = requestList.length;
 
     if (response.statusCode == 200) {
       // 응답 데이터 디코딩
@@ -37,6 +40,9 @@ class _NoticePageState extends State<NoticePage> {
           email = request['email'];
           nickname = request['nickname'];
         });
+
+        print(email);
+        print(nickname);
         Notice(email, nickname);
       }
     } else {
@@ -59,14 +65,14 @@ class _NoticePageState extends State<NoticePage> {
       body: ListView(children: [
         Center(
           child: Column(
-            children: [for(int i=0; i<3; i++) Notice(email, nickname)],
+            children: [for(var request in requestList) Notice(request['email'], request['nickname'])],
           ),
         ),
       ]),
     );
   }
 
-  Padding Notice(String email, String Nickname) {
+  Padding Notice(String email, String nickname) {
     return Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Slidable(
