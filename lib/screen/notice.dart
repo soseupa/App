@@ -37,7 +37,7 @@ class _NoticePageState extends State<NoticePage> {
           email = request['email'];
           nickname = request['nickname'];
         });
-        Notice();
+        Notice(email, nickname);
       }
     } else {
       // 요청 실패 처리
@@ -59,17 +59,18 @@ class _NoticePageState extends State<NoticePage> {
       body: ListView(children: [
         Center(
           child: Column(
-            children: ,
+            children: [for(int i=0; i<3; i++) Notice(email, nickname)],
           ),
         ),
       ]),
     );
   }
 
-  Padding Notice() {
+  Padding Notice(String email, String Nickname) {
     return Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Slidable(
+          //key: ValueKey(i),
           endActionPane: ActionPane(
             extentRatio: 0.2,
             motion: ScrollMotion(),
