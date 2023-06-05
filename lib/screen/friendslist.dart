@@ -1,11 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
 import 'package:http/http.dart' as http;
-
 import 'Login.dart';
 
 class FriendsListPage extends StatefulWidget {
@@ -23,6 +21,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
   String searchedNickname = '';
   String searchedEmail = '';
   bool showContainer = false;
+  bool _isfriend = false;
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +168,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       print('응답 본문: $responseBody');
       final nickname = decodeResponseBody['nickname'];
       final email = decodeResponseBody['email'];
+      _isfriend = decodeResponseBody['friend'];
       print('닉네임: $nickname');
       print('이메일: $email');
       setState(() {
@@ -206,7 +206,8 @@ class _FriendsListPageState extends State<FriendsListPage> {
       print(response.body);
     }
     else if(response.statusCode == 403){
-      print("이미 친구");
+      _isfriend = true;
+      print("이미 친구신청 보냄");
     }
     else {
       // 요청이 실패했을 경우
@@ -261,7 +262,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     ),
                     InkWell(
                         onTap: () => _rotateDialog('$searchedNickname', '$searchedEmail'),
-                        child: Icon(Icons.add))
+                        child : Icon(Icons.add))
                   ],
                 ),
               ),

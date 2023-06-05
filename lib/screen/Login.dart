@@ -30,6 +30,9 @@ class _LoginPageState extends State<LoginPage> {
     var url = Uri.parse('http://34.64.137.179:8080/login'); // Todo url 얻기
     var body = jsonEncode({'email': email, 'password':password});
 
+    print(email);
+    print(password);
+
     try {
       // HTTP POST 요청 보내기
       var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
@@ -46,10 +49,11 @@ class _LoginPageState extends State<LoginPage> {
         final responseData = jsonDecode(response.body);
       } else {
         logincheck = false;
-        print("로그인실패");
       }
     } catch (error) {
       logincheck = false;
+      print(emailController.text);
+      print(passwordController.text);
       print('로그인 요청 실패: $error');
     }
   }
@@ -172,7 +176,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           controller: passwordController,
                           onChanged: (value) {
-                            Login(emailController.text, passwordController.text);
+                            print(value);
                             _updateButtonState();
                           }
                       ),

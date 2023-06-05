@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:http/http.dart' as http;
+import 'Login.dart';
 
 class NoticePage extends StatefulWidget {
   const NoticePage({Key? key}) : super(key: key);
@@ -9,6 +13,44 @@ class NoticePage extends StatefulWidget {
 }
 
 class _NoticePageState extends State<NoticePage> {
+  Token? inputData = InputData.inputData;
+  String nickname = '';
+  String email = '';
+
+  Future<void> requestFriendlist() async {
+    String token = inputData?.token ?? "";
+
+    final url = Uri.parse('http://34.64.137.179:8080/friend/request');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final values = json.decode(responseBody);
+    List<dynamic> requestList = values['findFriendRequestResponseList'];
+
+    if (response.statusCode == 200) {
+      // 응답 데이터 디코딩
+      for (var request in requestList) {
+        email = request['email'];
+        nickname = request['nickname'];
+
+        setState(() {
+          email = request['email'];
+          nickname = request['nickname'];
+        });
+        Notice();
+      }
+    } else {
+      // 요청 실패 처리
+      print("실패");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    requestFriendlist();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,18 +59,17 @@ class _NoticePageState extends State<NoticePage> {
       body: ListView(children: [
         Center(
           child: Column(
-            children: [for (int i = 0; i < 3; i++) Notice(i)],
+            children: ,
           ),
         ),
       ]),
     );
   }
 
-  Padding Notice(int i) {
+  Padding Notice() {
     return Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Slidable(
-          key: ValueKey(i),
           endActionPane: ActionPane(
             extentRatio: 0.2,
             motion: ScrollMotion(),
@@ -50,7 +91,7 @@ class _NoticePageState extends State<NoticePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '김혜린',
+                      '$nickname',
                       style: TextStyle(
                           fontSize: 16,
                           fontFamily: 'NotoSansKR',
@@ -61,7 +102,7 @@ class _NoticePageState extends State<NoticePage> {
                       height: 4,
                     ),
                     Text(
-                      'hyehye@gmail.com',
+                      '$email',
                       style: TextStyle(
                           fontSize: 15,
                           fontFamily: 'NotoSansKR',
