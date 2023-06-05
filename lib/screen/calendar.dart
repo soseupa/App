@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:gaori/screen/addschedule.dart';
 import 'package:gaori/screen/notice.dart';
-import 'package:gaori/screen/webview.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import 'friendslist.dart';
@@ -89,7 +89,7 @@ class _MapPageState extends State<MapPage> {
           child: InkWell(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => KakaoMapTest()));
+                    MaterialPageRoute(builder: (context) => AddSchedulePage()));
               },
               child: Icon(
                 Icons.add,
