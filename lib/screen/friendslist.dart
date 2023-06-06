@@ -83,7 +83,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       padding: EdgeInsets.only(left: 15.0),
       child: SingleChildScrollView(
         child: Column(children: [
-          for (int i = 0; i < widget.friendsList.length; i++)
+          for (int i = 0; i <= widget.friendsList.length; i++)
             Padding(
                 padding: EdgeInsets.only(top: 18.0),
                 child: Slidable(
