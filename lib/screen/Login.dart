@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
       final Map<String, dynamic> responseData = json.decode(responseBody);
       final String accessToken = responseData['accessToken'];
       name = responseData['name'];
-      Token token = Token(token: accessToken);
+      Token token = Token(token : accessToken, email : email);
       InputData.inputData = token;
       print(accessToken);
 
@@ -232,6 +232,7 @@ class _LoginPageState extends State<LoginPage> {
 
 class Token {
   final String token;
+  final String email;
 
-  Token({required this.token});
+  Token({required this.token, required this.email});
 }

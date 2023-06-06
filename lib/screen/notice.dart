@@ -16,6 +16,7 @@ class _NoticePageState extends State<NoticePage> {
   Token? inputData = InputData.inputData;
   String nickname = '';
   String email = '';
+  int id = 0;
   int length = 0;
   List<dynamic> requestList = [];
 
@@ -35,15 +36,17 @@ class _NoticePageState extends State<NoticePage> {
       for (var request in requestList) {
         email = request['email'];
         nickname = request['nickname'];
+        id = request['id'];
 
         setState(() {
           email = request['email'];
           nickname = request['nickname'];
+          id = request['id'];
         });
 
         print(email);
         print(nickname);
-        Notice(email, nickname);
+        Notice(email, nickname, id);
       }
     } else {
       // 요청 실패 처리
@@ -65,14 +68,36 @@ class _NoticePageState extends State<NoticePage> {
       body: ListView(children: [
         Center(
           child: Column(
-            children: [for(var request in requestList) Notice(request['email'], request['nickname'])],
+            children: [for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])],
           ),
         ),
       ]),
     );
   }
 
-  Padding Notice(String email, String nickname) {
+  Future<void> acceptFriendRequest(int senderId) async {
+    String token = inputData?.token ?? "";
+
+    final url = Uri.parse('http://34.64.137.179:8080/friend/request/accept?senderId=$senderId');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+
+    print(senderId);
+    if (response.statusCode == 200) {
+      print("수락 완료");
+    }
+    else {
+      print("수락 실패");
+    }
+  }
+
+  //gimhanuly@gmail.com
+  //parkde0207@gmail.com
+  //jyulim0120@gmail.com
+  //05tngus95@gmail.com
+  //오케이
+
+  Padding Notice(String email, String nickname, int id) {
     return Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Slidable(
@@ -122,7 +147,10 @@ class _NoticePageState extends State<NoticePage> {
                   width: 30,
                 ),
                 ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      acceptFriendRequest(id);
+                      print(id);
+                    },
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(10, 15),
                       elevation: 0,
