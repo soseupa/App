@@ -3,15 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
+import 'package:gaori/screen/addschedule.dart';
 import 'package:gaori/screen/notice.dart';
-import 'package:gaori/screen/webview.dart';
+import 'package:http/http.dart' as http;
 import 'package:table_calendar/table_calendar.dart';
 
+import '../class/schedule.dart';
+import 'Login.dart';
 import 'friendslist.dart';
 import 'homepage.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage({Key? key}) : super(key: key);
+  final String name;
+
+  MapPage({required this.name});
 
   var nowYear = DateTime.now().year;
 
@@ -20,8 +25,12 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
+  // CalendarController _calendarController;
+  Token? inputData = InputData.inputData;
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
- var json_data;
+  var json_data;
+  var scheduleLength = 0;
+  List<Schedule_task> schedules = [];
 
   DateTime selectedDay = DateTime(
     DateTime.now().year,
@@ -33,11 +42,17 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
-
+    // _calendarController = CalendarController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _asyncMethod();
     });
   }
+
+  // @override
+  // void dispose() {
+  //   _calendarController.dispose();
+  //   super.dispose();
+  // }
 
   _asyncMethod() async {
     json_data = await rootBundle.loadString('assets/json/information.json');
@@ -55,7 +70,6 @@ class _MapPageState extends State<MapPage> {
     var month = DateTime.now().month;
     DateTime _now = DateTime.now();
     String user = "조수현";
-    String scheduleName = "벚꽃데이트";
 
     return Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
@@ -64,15 +78,99 @@ class _MapPageState extends State<MapPage> {
           children: [
             buildCalendarHeader(month),
             buildCalendarBody(_now, selectedDay, focusedDay),
-            PlusButton(user, selectedDay),
+            PlusButton(widget.name, selectedDay),
             SizedBox(
               height: 8,
             ),
+            for (int i = 0; i < schedules.length; i++)
+              Schedules(
+                  schedules[i].id, schedules[i].title, schedules[i].friends),
             // TaskList()
 
             // Test()
           ],
         ));
+  }
+
+  Future<void> _searchSchedule() async {
+    String token = inputData?.token ?? "";
+    final url = Uri.parse(
+        'http://34.64.137.179:8080/schedule?date=' + selectedDay.toString());
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
+    if (response.statusCode == 200) {
+      // 요청이 성공했을 경우
+      schedules.clear();
+      print(focusedDay.toString());
+      print('요청이 성공했습니다.');
+      Map<String, dynamic> jsonData = json.decode(responseBody);
+      scheduleLength = decodeResponseBody['length'];
+      for (int i = 0; i < scheduleLength; i++) {
+        List<ScheduleUser> scheduleUsers = [];
+        int userLength = jsonData['schedules'][i]['scheduleUsers'].length;
+        for (int j = 0; j < userLength; j++) {
+          scheduleUsers.add(ScheduleUser(
+              jsonData['schedules'][i]['scheduleUsers'][j]['userId'],
+              jsonData['schedules'][i]['scheduleUsers'][j]['nickname']));
+        }
+        String title = jsonData['schedules'][i]['title'];
+        int id = jsonData['schedules'][i]['scheduleId'];
+        schedules.add(Schedule_task(id, title, scheduleUsers));
+      }
+    } else {
+      // 요청이 실패했을 경우
+      print('요청이 실패했습니다.');
+      print('응답 상태 코드: ${response.statusCode}');
+    }
+  }
+
+  Padding Schedules(int id, String scheduleName, List<ScheduleUser> friends) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 8),
+      child: SizedBox(
+        width: 380,
+        height: 80,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(30, 30),
+              elevation: 0,
+              backgroundColor: Color(0xffF9F7F3),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14.78),
+              ),
+            ),
+            onPressed: () {},
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$scheduleName",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w500),
+                ),
+                Row(
+                  children: [
+                    for (int i = 0; i < friends.length; i++)
+                      Text(
+                        '${friends[i].name}',
+                        style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w300),
+                      )
+                  ],
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   Row PlusButton(String user, DateTime selectedDay) {
@@ -89,7 +187,7 @@ class _MapPageState extends State<MapPage> {
           child: InkWell(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => KakaoMapTest()));
+                    MaterialPageRoute(builder: (context) => AddSchedulePage()));
               },
               child: Icon(
                 Icons.add,
@@ -148,6 +246,7 @@ class _MapPageState extends State<MapPage> {
               this.selectedDay = selectedDay;
               this.focusedDay = focusedDay;
             });
+            _searchSchedule();
           }
         },
         selectedDayPredicate: (DateTime day) {

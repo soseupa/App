@@ -83,7 +83,7 @@ class _NoticePageState extends State<NoticePage> {
     final response = await http.get(url, headers: headers);
 
     print(senderId);
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200) { //gimhanuly@gmail.com
       print("수락 완료");
     }
     else {
