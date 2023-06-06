@@ -337,7 +337,9 @@ class _MapPageState extends State<MapPage> {
 
   AppBar buildAppBar() {
     return AppBar(
-      title: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
+      title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
         Padding(
           padding: const EdgeInsets.only(top: 10),
           child: InkWell(
@@ -346,8 +348,8 @@ class _MapPageState extends State<MapPage> {
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             },
             child: Image.asset(
-              'assets/image/logo.png',
-              height: 45,
+              'assets/image/mainlogo.png',
+              height: 35,
             ),
           ),
         ),
