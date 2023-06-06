@@ -84,7 +84,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
 
   Future<void> friendList() async {
     String token = inputData?.token ?? "";
-    print(token);
 
     final url = Uri.parse('http://34.64.137.179:8080/friend/list');
     final headers = {'Authorization': 'Bearer $token'};
@@ -105,8 +104,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
           nickname = request['nickname'];
         });
 
-        print(email);
-        print(nickname);
         alreadyFriend(email, nickname);
       }
     } else {
@@ -195,6 +192,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
 
   Future<void> _searchEmail(final email) async {
     String token = inputData?.token ?? "";
+    String useremail = inputData?.email ?? "";
     print(token);
 
     final url = Uri.parse('http://34.64.137.179:8080/auth/email/' + email);
@@ -203,7 +201,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     final responseBody = utf8.decode(response.bodyBytes);
     Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
     // 응답 처리 로직 작성
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 && useremail != decodeResponseBody['email']) {
       // 요청이 성공했을 경우
       print('요청이 성공했습니다.');
       print('응답 본문: $responseBody');
