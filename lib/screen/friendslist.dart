@@ -22,6 +22,10 @@ class _FriendsListPageState extends State<FriendsListPage> {
   String searchedEmail = '';
   bool showContainer = false;
   bool _isfriend = false;
+  List<dynamic> friendlist = [];
+  int length = 0;
+  String email = '';
+  String nickname = '';
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +38,8 @@ class _FriendsListPageState extends State<FriendsListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Search(),
-            if(showContainer==false)alreadyFriend(),
-            if(showContainer) NotFriend(),
+            if(showContainer==false) for(var friend in friendlist) alreadyFriend(friend['email'], friend['nickname']),
+            if(showContainer) NotFriend(),  //for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])
             // HavenoFriend(),
           ],
         ),
@@ -78,16 +82,53 @@ class _FriendsListPageState extends State<FriendsListPage> {
     );
   }
 
-  Padding alreadyFriend() {
+  Future<void> friendList() async {
+    String token = inputData?.token ?? "";
+    print(token);
+
+    final url = Uri.parse('http://34.64.137.179:8080/friend/list');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final values = json.decode(responseBody);
+    friendlist = values['friendList'];
+    length = friendlist.length;
+
+    if (response.statusCode == 200) {
+      // 응답 데이터 디코딩
+      for (var request in friendlist) {
+        email = request['email'];
+        nickname = request['nickname'];
+
+        setState(() {
+          email = request['email'];
+          nickname = request['nickname'];
+        });
+
+        print(email);
+        print(nickname);
+        alreadyFriend(email, nickname);
+      }
+    } else {
+      // 요청 실패 처리
+      print("실패");
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    friendList();
+  }
+
+  Padding alreadyFriend(String email, String nickname) {
     return Padding(
       padding: EdgeInsets.only(left: 15.0),
       child: SingleChildScrollView(
         child: Column(children: [
-          for (int i = 0; i < widget.friendsList.length; i++)
             Padding(
                 padding: EdgeInsets.only(top: 18.0),
                 child: Slidable(
-                  key: ValueKey(i),
                   endActionPane: ActionPane(
                     extentRatio: 0.25,
                     motion: ScrollMotion(),
@@ -103,7 +144,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                   ),
                   child: InkWell(
                     onTap: () =>
-                        alreadyFriends('${widget.friendsList[i].name}'),
+                        alreadyFriends('$nickname'),
                     child: Container(
                       width: 400,
                       height: 66,
@@ -119,7 +160,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                             children: [
                               Padding(
                                 padding: EdgeInsets.only(left: 18.0),
-                                child: Text('${widget.friendsList[i].name}',
+                                child: Text('$nickname',
                                     style: TextStyle(
                                         fontSize: 18,
                                         fontFamily: 'NotoSansKR',
@@ -133,7 +174,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(widget.friendsList[i].email,
+                                Text('$email',
                                     style: TextStyle(
                                         fontSize: 17,
                                         fontFamily: 'NotoSansKR',

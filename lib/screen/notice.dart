@@ -83,13 +83,19 @@ class _NoticePageState extends State<NoticePage> {
     final response = await http.get(url, headers: headers);
 
     print(senderId);
-    if (response.statusCode == 200) { //gimhanuly@gmail.com
+    if (response.statusCode == 200) {
       print("수락 완료");
     }
     else {
       print("수락 실패");
     }
   }
+
+  //gimhanuly@gmail.com
+  //parkde0207@gmail.com
+  //jyulim0120@gmail.com
+  //05tngus95@gmail.com
+  //오케이
 
   Padding Notice(String email, String nickname, int id) {
     return Padding(
