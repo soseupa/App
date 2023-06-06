@@ -5,30 +5,31 @@ import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
 import 'package:gaori/screen/addschedule.dart';
 import 'package:gaori/screen/notice.dart';
+import 'package:http/http.dart' as http;
 import 'package:table_calendar/table_calendar.dart';
 
 import '../class/schedule.dart';
 import 'Login.dart';
 import 'friendslist.dart';
-import 'package:http/http.dart' as http;
 import 'homepage.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage({Key? key}) : super(key: key);
+  final String name;
+
+  MapPage({required this.name});
 
   var nowYear = DateTime.now().year;
 
   @override
   State<MapPage> createState() => _MapPageState();
-
 }
 
 class _MapPageState extends State<MapPage> {
   // CalendarController _calendarController;
   Token? inputData = InputData.inputData;
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
- var json_data;
-  var scheduleLength=0;
+  var json_data;
+  var scheduleLength = 0;
   List<Schedule_task> schedules = [];
 
   DateTime selectedDay = DateTime(
@@ -46,6 +47,7 @@ class _MapPageState extends State<MapPage> {
       _asyncMethod();
     });
   }
+
   // @override
   // void dispose() {
   //   _calendarController.dispose();
@@ -68,7 +70,6 @@ class _MapPageState extends State<MapPage> {
     var month = DateTime.now().month;
     DateTime _now = DateTime.now();
     String user = "조수현";
-    String scheduleName = "벚꽃데이트";
 
     return Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
@@ -77,21 +78,24 @@ class _MapPageState extends State<MapPage> {
           children: [
             buildCalendarHeader(month),
             buildCalendarBody(_now, selectedDay, focusedDay),
-            PlusButton(user, selectedDay),
+            PlusButton(widget.name, selectedDay),
             SizedBox(
               height: 8,
             ),
             for (int i = 0; i < schedules.length; i++)
-              Schedules(schedules[i].id, schedules[i].title,schedules[i].friends),
+              Schedules(
+                  schedules[i].id, schedules[i].title, schedules[i].friends),
             // TaskList()
 
             // Test()
           ],
         ));
   }
+
   Future<void> _searchSchedule() async {
     String token = inputData?.token ?? "";
-    final url = Uri.parse('http://34.64.137.179:8080/schedule?date=' + selectedDay.toString());
+    final url = Uri.parse(
+        'http://34.64.137.179:8080/schedule?date=' + selectedDay.toString());
     final headers = {'Authorization': 'Bearer $token'};
     final response = await http.get(url, headers: headers);
     final responseBody = utf8.decode(response.bodyBytes);
@@ -103,22 +107,22 @@ class _MapPageState extends State<MapPage> {
       print('요청이 성공했습니다.');
       Map<String, dynamic> jsonData = json.decode(responseBody);
       scheduleLength = decodeResponseBody['length'];
-      for(int i=0; i<scheduleLength; i++){
+      for (int i = 0; i < scheduleLength; i++) {
         List<ScheduleUser> scheduleUsers = [];
         int userLength = jsonData['schedules'][i]['scheduleUsers'].length;
-        for(int j=0; j<userLength; j++){
-          scheduleUsers.add(ScheduleUser(jsonData['schedules'][i]['scheduleUsers'][j]['userId'], jsonData['schedules'][i]['scheduleUsers'][j]['nickname']));
+        for (int j = 0; j < userLength; j++) {
+          scheduleUsers.add(ScheduleUser(
+              jsonData['schedules'][i]['scheduleUsers'][j]['userId'],
+              jsonData['schedules'][i]['scheduleUsers'][j]['nickname']));
         }
         String title = jsonData['schedules'][i]['title'];
         int id = jsonData['schedules'][i]['scheduleId'];
         schedules.add(Schedule_task(id, title, scheduleUsers));
-
       }
     } else {
       // 요청이 실패했을 경우
       print('요청이 실패했습니다.');
       print('응답 상태 코드: ${response.statusCode}');
-
     }
   }
 

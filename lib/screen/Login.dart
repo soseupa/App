@@ -1,8 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/calendar.dart';
-import 'Start_page.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
+
+import 'Start_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,24 +25,28 @@ class _LoginPageState extends State<LoginPage> {
   bool logincheck = true;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  String name = '';
 
-  Future<void> Login(String email, String password) async{
+  Future<void> Login(String email, String password) async {
     email = emailController.text;
     password = passwordController.text;
     var url = Uri.parse('http://34.64.137.179:8080/login'); // Todo url 얻기
-    var body = jsonEncode({'email': email, 'password':password});
+    var body = jsonEncode({'email': email, 'password': password});
 
     try {
       // HTTP POST 요청 보내기
-      var response = await http.post(url, body: body, headers : {'Content-Type': 'application/json'});
-      final Map<String, dynamic> responseData = json.decode(response.body);
+      var response = await http
+          .post(url, body: body, headers: {'Content-Type': 'application/json'});
+      final responseBody = utf8.decode(response.bodyBytes);
+      final Map<String, dynamic> responseData = json.decode(responseBody);
       final String accessToken = responseData['accessToken'];
+      name = responseData['name'];
       Token token = Token(token: accessToken);
       InputData.inputData = token;
       print(accessToken);
 
       // 서버로부터 받은 응답 처리
-      if (response.statusCode == 200 && password.length>0) {
+      if (response.statusCode == 200 && password.length > 0) {
         logincheck = true;
         print("로그인성공");
         final responseData = jsonDecode(response.body);
@@ -68,10 +74,11 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.addListener(_updateButtonState);
   }
 
-  void _updateButtonState() { // 버튼이 활성화
+  void _updateButtonState() {
+    // 버튼이 활성화
     setState(() {
-      _isButtonEnabled = emailController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty;
+      _isButtonEnabled =
+          emailController.text.isNotEmpty && passwordController.text.isNotEmpty;
     });
   }
 
@@ -156,11 +163,13 @@ class _LoginPageState extends State<LoginPage> {
                       child: TextField(
                           obscureText: true,
                           decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                            contentPadding:
+                                EdgeInsets.symmetric(horizontal: 12.0),
                             hintText: '비밀번호를 입력해주세요.',
-                            errorText: ! logincheck ? '비밀번호가 틀렸습니다.' : null,
+                            errorText: !logincheck ? '비밀번호가 틀렸습니다.' : null,
                             errorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red, width: 2.0),
+                              borderSide:
+                                  BorderSide(color: Colors.red, width: 2.0),
                               borderRadius: BorderRadius.circular(14.0),
                             ),
                             border: OutlineInputBorder(
@@ -172,10 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           controller: passwordController,
                           onChanged: (value) {
-                            Login(emailController.text, passwordController.text);
+                            Login(
+                                emailController.text, passwordController.text);
                             _updateButtonState();
-                          }
-                      ),
+                          }),
                     ),
                   ],
                 ),
@@ -188,15 +197,18 @@ class _LoginPageState extends State<LoginPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                  Login(emailController.text, passwordController.text);
-                  if(logincheck) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MapPage()),
-                    );
-                  }
-                  setState(() => isButtonActive = false);
-                }
+                        Login(emailController.text, passwordController.text);
+                        if (logincheck) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapPage(
+                                      name: name,
+                                    )),
+                          );
+                        }
+                        setState(() => isButtonActive = false);
+                      }
                     : null,
                 child: Text(
                   "완료",
@@ -220,5 +232,6 @@ class _LoginPageState extends State<LoginPage> {
 
 class Token {
   final String token;
+
   Token({required this.token});
 }
