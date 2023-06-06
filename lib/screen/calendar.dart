@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
 import 'package:gaori/screen/addschedule.dart';
 import 'package:gaori/screen/notice.dart';
@@ -29,8 +28,9 @@ class _MapPageState extends State<MapPage> {
   Token? inputData = InputData.inputData;
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
   var json_data;
-  var scheduleLength = 0;
+  int scheduleLength = 0;
   List<Schedule_task> schedules = [];
+  List<Widget> scheduleWidget = [];
 
   DateTime selectedDay = DateTime(
     DateTime.now().year,
@@ -40,37 +40,9 @@ class _MapPageState extends State<MapPage> {
   DateTime focusedDay = DateTime.now();
 
   @override
-  void initState() {
-    super.initState();
-    // _calendarController = CalendarController();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _asyncMethod();
-    });
-  }
-
-  // @override
-  // void dispose() {
-  //   _calendarController.dispose();
-  //   super.dispose();
-  // }
-
-  _asyncMethod() async {
-    json_data = await rootBundle.loadString('assets/json/information.json');
-    var decode_data = json.decode(json_data);
-    for (int i = 0; i < decode_data["length"]; i++) {
-      friendsList.add(friendListUserInfoModel(
-          decode_data["friend"][i]["name"], decode_data["friend"][i]["email"]));
-    }
-    setState(() {});
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
     var month = DateTime.now().month;
     DateTime _now = DateTime.now();
-    String user = "조수현";
-
     return Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
         appBar: buildAppBar(),
@@ -82,9 +54,9 @@ class _MapPageState extends State<MapPage> {
             SizedBox(
               height: 8,
             ),
-            for (int i = 0; i < schedules.length; i++)
-              Schedules(
-                  schedules[i].id, schedules[i].title, schedules[i].friends),
+            Column(
+              children: scheduleWidget,
+            ),
             // TaskList()
 
             // Test()
@@ -109,16 +81,24 @@ class _MapPageState extends State<MapPage> {
       scheduleLength = decodeResponseBody['length'];
       for (int i = 0; i < scheduleLength; i++) {
         List<ScheduleUser> scheduleUsers = [];
+        scheduleUsers.clear();
         int userLength = jsonData['schedules'][i]['scheduleUsers'].length;
+        print(userLength);
         for (int j = 0; j < userLength; j++) {
+          print(jsonData['schedules'][i]['scheduleUsers'][j]['nickname']);
           scheduleUsers.add(ScheduleUser(
               jsonData['schedules'][i]['scheduleUsers'][j]['userId'],
               jsonData['schedules'][i]['scheduleUsers'][j]['nickname']));
+          print(scheduleUsers[j].name);
         }
+
         String title = jsonData['schedules'][i]['title'];
         int id = jsonData['schedules'][i]['scheduleId'];
         schedules.add(Schedule_task(id, title, scheduleUsers));
       }
+      setState(() {
+        scheduleWidget = Schedules(schedules);
+      });
     } else {
       // 요청이 실패했을 경우
       print('요청이 실패했습니다.');
@@ -126,51 +106,56 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  Padding Schedules(int id, String scheduleName, List<ScheduleUser> friends) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
-      child: SizedBox(
-        width: 380,
-        height: 80,
-        child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              fixedSize: Size(30, 30),
-              elevation: 0,
-              backgroundColor: Color(0xffF9F7F3),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14.78),
-              ),
-            ),
-            onPressed: () {},
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$scheduleName",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                      fontFamily: 'NotoSansKR',
-                      fontWeight: FontWeight.w500),
+  List<Widget> Schedules(List<Schedule_task> schedules) {
+    List<Widget> result = [];
+    scheduleWidget.clear();
+    for (int i = 0; i < schedules.length; i++) {
+      result.add(Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: SizedBox(
+          width: 380,
+          height: 80,
+          child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                fixedSize: Size(30, 30),
+                elevation: 0,
+                backgroundColor: Color(0xffF9F7F3),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(14.78),
                 ),
-                Row(
-                  children: [
-                    for (int i = 0; i < friends.length; i++)
-                      Text(
-                        '${friends[i].name}',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15,
-                            fontFamily: 'NotoSansKR',
-                            fontWeight: FontWeight.w300),
-                      )
-                  ],
-                )
-              ],
-            )),
-      ),
-    );
+              ),
+              onPressed: () {},
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "${schedules[i].title}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontFamily: 'NotoSansKR',
+                        fontWeight: FontWeight.w500),
+                  ),
+                  Row(
+                    children: [
+                      for (int j = 0; j < schedules[i].friends.length; j++)
+                        Text(
+                          '${schedules[j].friends[j].name}',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w300),
+                        )
+                    ],
+                  )
+                ],
+              )),
+        ),
+      ));
+    }
+    return result;
   }
 
   Row PlusButton(String user, DateTime selectedDay) {
@@ -245,8 +230,9 @@ class _MapPageState extends State<MapPage> {
             setState(() {
               this.selectedDay = selectedDay;
               this.focusedDay = focusedDay;
+              _searchSchedule();
+              scheduleWidget = Schedules(schedules);
             });
-            _searchSchedule();
           }
         },
         selectedDayPredicate: (DateTime day) {
