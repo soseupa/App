@@ -83,6 +83,8 @@ flutter:
     - assets/image/friendrequeset.png
     - assets/json/information.json
     - assets/image/juhomin.png
+    - assets/image/taerae.png
+    - assets/image/select.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
