@@ -1,16 +1,64 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-import '../class/friendListUserInfo.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+
+import 'Login.dart';
 
 class AddSchedulePage extends StatefulWidget {
-  const AddSchedulePage({Key? key}) : super(key: key);
+  DateTime date;
+
+  AddSchedulePage({required this.date});
 
   @override
   State<AddSchedulePage> createState() => _AddSchedulePageState();
 }
 
 class _AddSchedulePageState extends State<AddSchedulePage> {
-  final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
+  String inputValue = '';
+  Token? inputData = InputData.inputData;
+  final formatter = DateFormat('yyyy-MM-ddTHH:mm:ss');
+
+  String formattedDate = '';
+
+  String format() {
+    DateTime newDate = widget.date.add(Duration(minutes: 1));
+    formattedDate = formatter.format(newDate);
+    return formattedDate;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    format();
+  }
+
+  void _handleSubmit() {
+    print('전달할 값: $inputValue');
+  }
+
+  Future<void> _makeSchedule() async {
+    String token = inputData?.token ?? "";
+    final url = Uri.parse('http://34.64.137.179:8080/schedule');
+    Map<String, dynamic> requestBody = {
+      'title': '${inputValue}',
+      'time': '${formattedDate}',
+    };
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(requestBody),
+    );
+    if (response.statusCode == 200) {
+      print('SCHEDULE 생성 완료');
+    } else {
+      print('SCHEDULE 생성 실패');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +116,11 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
                     width: 320,
                     height: 60,
                     child: TextFormField(
+                        onChanged: (value) {
+                          setState(() {
+                            inputValue = value; // TextField의 값이 변경될 때마다 변수에 저장
+                          });
+                        },
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: 'NotoSansKR',
@@ -103,7 +156,10 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              _makeSchedule();
+              Navigator.pop(context);
+            },
             child: Text(
               '일정 추가하기',
               style: TextStyle(

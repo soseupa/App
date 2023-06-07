@@ -83,7 +83,6 @@ class _MapPageState extends State<MapPage> {
     final responseBody = utf8.decode(response.bodyBytes);
     Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
     if (response.statusCode == 200) {
-      // 요청이 성공했을 경우
       schedules.clear();
       print('요청이 성공했습니다.');
       Map<String, dynamic> jsonData = json.decode(responseBody);
@@ -192,7 +191,7 @@ class _MapPageState extends State<MapPage> {
           child: InkWell(
               onTap: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddSchedulePage()));
+                    MaterialPageRoute(builder: (context) => AddSchedulePage(date: selectedDay,)));
               },
               child: Icon(
                 Icons.add,
@@ -251,7 +250,6 @@ class _MapPageState extends State<MapPage> {
               this.selectedDay = selectedDay;
               this.focusedDay = focusedDay;
               _searchSchedule();
-              // scheduleWidget = Schedules(schedules);
             });
           }
         },
