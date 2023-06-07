@@ -67,7 +67,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
       child: TextFormField(
         controller: emailController,
         decoration: InputDecoration(
-            hintText: '친구의 이메일을 검색해보세요.',
+            hintText: '친구의 이메일을 검색해 보세요.',
             hintStyle: TextStyle(
               color: Color(0xffDEDEDE),
             ),
