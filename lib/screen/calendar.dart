@@ -38,7 +38,11 @@ class _MapPageState extends State<MapPage> {
     DateTime.now().day,
   );
   DateTime focusedDay = DateTime.now();
-
+@override
+  void initState() {
+    super.initState();
+    _searchSchedule();
+  }
   @override
   Widget build(BuildContext context) {
     var month = DateTime.now().month;
