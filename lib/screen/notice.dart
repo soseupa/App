@@ -116,58 +116,61 @@ class _NoticePageState extends State<NoticePage> {
             ],
           ),
           child: SizedBox(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '$nickname',
-                      style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'NotoSansKR',
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black),
-                    ),
-                    SizedBox(
-                      height: 4,
-                    ),
-                    Text(
-                      '$email',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NotoSansKR',
-                          fontWeight: FontWeight.w300,
-                          color: Colors.black),
-                    )
-                  ],
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      acceptFriendRequest(id);
-                      print(id);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      fixedSize: Size(10, 15),
-                      elevation: 0,
-                      backgroundColor: Color(0xffFFF1F8),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0),
+            child: Padding(
+              padding: EdgeInsets.only(left: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '$nickname',
+                        style: TextStyle(
+                            fontSize: 16,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black),
                       ),
-                    ),
-                    child: Text(
-                      '수락',
-                      style: TextStyle(
-                          fontSize: 15,
-                          fontFamily: 'NotoSansKR',
-                          fontWeight: FontWeight.w600,
-                          color: Color(0xffFF3F9B)),
-                    ))
-              ],
+                      SizedBox(
+                        height: 4,
+                      ),
+                      Text(
+                        '$email',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w300,
+                            color: Colors.black),
+                      )
+                    ],
+                  ),
+                  ElevatedButton(
+                      onPressed: () {
+                        acceptFriendRequest(id);
+                        print(id);
+                        setState(() {
+                          requestList.removeWhere((element) => element['id'] == id);
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        fixedSize: Size(10, 15),
+                        elevation: 0,
+                        backgroundColor: Color(0xffFFF1F8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: Text(
+                        '수락',
+                        style: TextStyle(
+                            fontSize: 15,
+                            fontFamily: 'NotoSansKR',
+                            fontWeight: FontWeight.w600,
+                            color: Color(0xffFF3F9B)),
+                      ))
+                ],
+              ),
             ),
           ),
         ));
