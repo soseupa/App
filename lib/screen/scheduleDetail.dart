@@ -172,30 +172,40 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 10.0, bottom: 3),
-                            child: Text("일정을 입력해 주세요",
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: 'NotoSansKR',
-                                    color: Color(0xffD9D9D9),
-                                    fontWeight: FontWeight.w600)),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10.0, top: 3),
-                            child: Text('위치를 설정해 주세요',
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    fontFamily: 'NotoSansKR',
-                                    color: Color(0xffD9D9D9),
-                                    fontWeight: FontWeight.w400)),
-                          ),
-                        ],
+                      InkWell(
+                        onTap: () {
+                          //TODO : 일정 추가 페이지 연결
+                          // Navigator.push(
+                          //     context,
+                          //     MaterialPageRoute(
+                          //         builder: (context) => HomePage()));
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, bottom: 3),
+                              child: Text("일정을 입력해 주세요",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Color(0xffD9D9D9),
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 10.0, top: 3),
+                              child: Text('위치를 설정해 주세요',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Color(0xffD9D9D9),
+                                      fontWeight: FontWeight.w400)),
+                            ),
+                          ],
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 15.0),
