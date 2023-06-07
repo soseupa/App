@@ -34,6 +34,13 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     super.initState();
     findScheduleDetails();
   }
+  // @override
+  // void dispose() {
+  //   setState(() {
+  //     findScheduleDetails();
+  //   });
+  //   super.dispose();
+  // }
 
   Future<void> findScheduleDetails() async {
     String token = inputData?.token ?? "";
@@ -148,7 +155,9 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => AddScheduleUsers()));
+                                  builder: (context) => AddScheduleUsers(
+                                        id: widget.id,
+                                      )));
                         },
                       ),
                     ),

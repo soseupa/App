@@ -8,9 +8,9 @@ import 'package:http/http.dart' as http;
 import 'Login.dart';
 
 class AddScheduleUsers extends StatefulWidget {
-  // final List<friendListUserInfoModel> friendsList;
+  final int id;
 
-  const AddScheduleUsers({Key? key}) : super(key: key);
+  AddScheduleUsers({required this.id});
 
   @override
   State<AddScheduleUsers> createState() => _AddScheduleUsersState();
@@ -29,6 +29,13 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     super.initState();
     friendList();
   }
+  // @override
+  // void dispose() {
+  //   setState(() {
+  //     showContainer = false;
+  //   });
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +50,22 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
               for (var friend in friendlist)
                 alreadyFriend(friend['email'], friend['nickname']),
             ])));
+  }
+
+  Future<void> addFriendToSchedule(String selectedEmail) async {
+    String token = inputData?.token ?? "";
+
+    final url = Uri.parse(
+        'http://34.64.137.179:8080/schedule/user/add?id=${widget.id}&email=$selectedEmail');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    if (response.statusCode == 200) {
+      // 응답 데이터 디코딩
+      print("성공");
+    } else {
+      // 요청 실패 처리
+      print("실패");
+    }
   }
 
   Future<void> friendList() async {
@@ -75,7 +98,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     }
   }
 
-  SingleChildScrollView alreadyFriend(String email, String nickname) {
+  SingleChildScrollView alreadyFriend(String Email, String nickname) {
     return SingleChildScrollView(
       child: Column(children: [
         Padding(
@@ -96,7 +119,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
               ),
               child: Center(
                 child: InkWell(
-                  onTap: () => alreadyFriends('$nickname'),
+                  onTap: () => alreadyFriends('$nickname', '$Email'),
                   child: Container(
                     width: 360,
                     height: 66,
@@ -145,7 +168,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     );
   }
 
-  void alreadyFriends(String name) {
+  void alreadyFriends(String name, String Email) {
     showAnimatedDialog(
         context: context,
         barrierDismissible: true,
@@ -204,6 +227,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
                         elevation: 0,
                         fixedSize: Size(120, 30)),
                     onPressed: () {
+                      addFriendToSchedule(Email);
                       Navigator.pop(context);
                     },
                     child: const Text("확인"),
