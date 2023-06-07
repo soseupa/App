@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import 'AddScheduleUsers.dart';
+import 'Login.dart';
 
 class ScheduleDetailPage extends StatefulWidget {
   final int id;
@@ -13,6 +17,45 @@ class ScheduleDetailPage extends StatefulWidget {
 }
 
 class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
+  Token? inputData = InputData.inputData;
+  List<dynamic> scheduleUsers = [];
+  String nickname = '';
+  int userId = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    findScheduleDetails();
+  }
+
+  Future<void> findScheduleDetails() async {
+    String token = inputData?.token ?? "";
+
+    final url =
+        Uri.parse('http://34.64.137.179:8080/schedule/detail/${widget.id}');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final values = json.decode(responseBody);
+    if (response.statusCode == 200) {
+      scheduleUsers = values['scheduleUsers'];
+      for (var user in scheduleUsers) {
+        nickname = user['nickname'];
+        userId = user['userId'];
+        print(user['nickname']);
+        print(user['userId']);
+        setState(() {
+          nickname = user['nickname'];
+          userId = user['userId'];
+        });
+        scheduleuser(nickname, userId);
+      }
+    } else {
+      // 요청 실패 처리
+      print("실패");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,47 +104,31 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Text('${widget.title}',
-                  //   style: TextStyle(
-                  //       fontSize: 20,
-                  //       fontFamily: 'NotoSansKR',
-                  //       color: Color(0xff000000),
-                  //       fontWeight: FontWeight.w500
-                  //   ),
-                  // ),
-                ],
-              ),
-            ),
-            // Divider(
-            //   thickness: 0.5,
-            //   color: Color(0xffDEDEDE),
-            // ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 21.0),
-                ),
-                for (int i = 0; i < 3; i++) scheduleuser(),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0, left: 8),
-                  child: InkWell(
-                    child: Icon(
-                      Icons.add_circle,
-                      color: Color(0xffFF3F9B),
-                      size: 35,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 21.0),
                     ),
-                    onTap: () {
-                      Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => AddScheduleUsers()));
-                    },
-                  ),
-                ),
-              ],
+                    for (var user in scheduleUsers)
+                      scheduleuser(user['nickname'], user['userId']),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0, left: 8),
+                      child: InkWell(
+                        child: Icon(
+                          Icons.add_circle,
+                          color: Color(0xffFF3F9B),
+                          size: 35,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => AddScheduleUsers()));
+                        },
+                      ),
+                    ),
+                  ]),
             ),
             Center(
               child: Padding(
@@ -203,7 +230,7 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     );
   }
 
-  Padding scheduleuser() {
+  Padding scheduleuser(String name, int userId) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0, top: 10),
       child: Container(
@@ -217,7 +244,7 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.only(bottom: 3.0),
-            child: Text('김지원',
+            child: Text('$name',
                 // textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 16,
