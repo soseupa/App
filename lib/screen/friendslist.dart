@@ -1,9 +1,11 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:gaori/class/friendListUserInfo.dart';
 import 'package:http/http.dart' as http;
+
 import 'Login.dart';
 
 class FriendsListPage extends StatefulWidget {
@@ -38,8 +40,11 @@ class _FriendsListPageState extends State<FriendsListPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Search(),
-            if(showContainer==false) for(var friend in friendlist) alreadyFriend(friend['email'], friend['nickname']),
-            if(showContainer) NotFriend(),  //for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])
+            if (showContainer == false)
+              for (var friend in friendlist)
+                alreadyFriend(friend['email'], friend['nickname']),
+            if (showContainer) NotFriend(),
+            //for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])
             // HavenoFriend(),
           ],
         ),
@@ -118,75 +123,73 @@ class _FriendsListPageState extends State<FriendsListPage> {
     friendList();
   }
 
-  Padding alreadyFriend(String email, String nickname) {
-    return Padding(
-      padding: EdgeInsets.only(left: 15.0),
-      child: SingleChildScrollView(
-        child: Column(children: [
-            Padding(
-                padding: EdgeInsets.only(top: 18.0),
-                child: Slidable(
-                  endActionPane: ActionPane(
-                    extentRatio: 0.25,
-                    motion: ScrollMotion(),
-                    children: [
-                      SlidableAction(
-                        onPressed: (context) {},
-                        backgroundColor: Colors.red,
-                        foregroundColor: Colors.white,
-                        icon: Icons.delete,
-                        label: '친구 삭제',
-                      ),
-                    ],
+  SingleChildScrollView alreadyFriend(String email, String nickname) {
+    return SingleChildScrollView(
+      child: Column(children: [
+        Padding(
+            padding: EdgeInsets.only(top: 12.0),
+            child: Slidable(
+              endActionPane: ActionPane(
+                extentRatio: 0.25,
+                motion: ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {},
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: '친구 삭제',
                   ),
-                  child: InkWell(
-                    onTap: () =>
-                        alreadyFriends('$nickname'),
-                    child: Container(
-                      width: 400,
-                      height: 66,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Color(0xffF9F7F7)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                ],
+              ),
+              child: Center(
+                child: InkWell(
+                  onTap: () => alreadyFriends('$nickname'),
+                  child: Container(
+                    width: 360,
+                    height: 66,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0xffF9F7F7)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Text('$nickname',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 23),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
                             children: [
-                              Padding(
-                                padding: EdgeInsets.only(left: 18.0),
-                                child: Text('$nickname',
-                                    style: TextStyle(
-                                        fontSize: 18,
-                                        fontFamily: 'NotoSansKR',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600)),
-                              ),
+                              Text('$email',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400)),
                             ],
                           ),
-                          Padding(
-                            padding: EdgeInsets.only(right: 23),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text('$email',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'NotoSansKR',
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w300)),
-                              ],
-                            ),
-                          )
-                        ],
-                      ),
+                        )
+                      ],
                     ),
                   ),
-                )),
-        ]),
-      ),
+                ),
+              ),
+            )),
+      ]),
     );
   }
 
@@ -201,7 +204,8 @@ class _FriendsListPageState extends State<FriendsListPage> {
     final responseBody = utf8.decode(response.bodyBytes);
     Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
     // 응답 처리 로직 작성
-    if (response.statusCode == 200 && useremail != decodeResponseBody['email']) {
+    if (response.statusCode == 200 &&
+        useremail != decodeResponseBody['email']) {
       // 요청이 성공했을 경우
       print('요청이 성공했습니다.');
       print('응답 본문: $responseBody');
@@ -218,7 +222,6 @@ class _FriendsListPageState extends State<FriendsListPage> {
       // 요청이 실패했을 경우
       print('요청이 실패했습니다.');
       print('응답 상태 코드: ${response.statusCode}');
-
     }
   }
 
@@ -236,19 +239,20 @@ class _FriendsListPageState extends State<FriendsListPage> {
     var response = await http.post(
       Uri.parse(url),
       body: requestBody,
-      headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer $token'},
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token'
+      },
     );
 
     if (response.statusCode == 200) {
       // 요청이 성공적으로 보내졌을 경우
       print("친구요쳥 성공");
       print(response.body);
-    }
-    else if(response.statusCode == 403){
+    } else if (response.statusCode == 403) {
       _isfriend = true;
       print("이미 친구신청 보냄");
-    }
-    else {
+    } else {
       // 요청이 실패했을 경우
       print("친구요청 실패");
       print('응답 상태 코드: ${response.statusCode}');
@@ -261,7 +265,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
       child: InkWell(
         onTap: () {},
         child: Container(
-          width: 400,
+          width: 360,
           height: 66,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -277,7 +281,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
                     padding: EdgeInsets.only(left: 18.0),
                     child: Text('$searchedNickname',
                         style: TextStyle(
-                            fontSize: 18,
+                            fontSize: 16,
                             fontFamily: 'NotoSansKR',
                             color: Colors.black,
                             fontWeight: FontWeight.w600)),
@@ -300,8 +304,9 @@ class _FriendsListPageState extends State<FriendsListPage> {
                               fontWeight: FontWeight.w300)),
                     ),
                     InkWell(
-                        onTap: () => _rotateDialog('$searchedNickname', '$searchedEmail'),
-                        child : Icon(Icons.add))
+                        onTap: () => _rotateDialog(
+                            '$searchedNickname', '$searchedEmail'),
+                        child: Icon(Icons.add))
                   ],
                 ),
               ),
@@ -319,14 +324,18 @@ class _FriendsListPageState extends State<FriendsListPage> {
   SizedBox Search() {
     final emailController = TextEditingController();
     return SizedBox(
-      width: 400,
+      width: 360,
       height: 50,
       child: TextFormField(
         controller: emailController,
+        // textAlignVertical: TextAlignVertical.center,
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
-            hintText: '친구의 이메일을 검색해보세요.',
+            hintText: '친구의 이메일을 검색해 보세요.',
             hintStyle: TextStyle(
               color: Color(0xffDEDEDE),
+              fontSize: 15,
+              fontFamily: 'NotoSansKR',
             ),
             border: InputBorder.none,
             suffixIcon: InkWell(
@@ -408,15 +417,15 @@ class _FriendsListPageState extends State<FriendsListPage> {
                             fontFamily: 'NotoSansKR',
                             fontWeight: FontWeight.w600),
                         children: const [
-                          TextSpan(
-                              text: '님께 친구 요청을 보내시겠어요?\n',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontFamily: 'NotoSansKR',
-                                fontSize: 17,
-                              )),
-                        ])),
+                      TextSpan(
+                          text: '님께 친구 요청을 보내시겠어요?\n',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'NotoSansKR',
+                            fontSize: 17,
+                          )),
+                    ])),
                 const Center(
                   child: Text('한 번 건 친구 요청은 취소가 불가능합니다.',
                       style: TextStyle(
@@ -505,15 +514,15 @@ class _FriendsListPageState extends State<FriendsListPage> {
                               fontFamily: 'NotoSansKR',
                               fontWeight: FontWeight.w600),
                           children: const [
-                            TextSpan(
-                                text: '님과 친구입니다!',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                  fontFamily: 'NotoSansKR',
-                                  fontSize: 17,
-                                )),
-                          ])),
+                        TextSpan(
+                            text: '님과 친구입니다!',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'NotoSansKR',
+                              fontSize: 17,
+                            )),
+                      ])),
                 ),
               ],
             ),

@@ -154,7 +154,7 @@ class _NoticePageState extends State<NoticePage> {
                     style: ElevatedButton.styleFrom(
                       fixedSize: Size(10, 15),
                       elevation: 0,
-                      backgroundColor: Color(0xffFFE0EF),
+                      backgroundColor: Color(0xffFFF1F8),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -162,7 +162,7 @@ class _NoticePageState extends State<NoticePage> {
                     child: Text(
                       '수락',
                       style: TextStyle(
-                          fontSize: 17,
+                          fontSize: 15,
                           fontFamily: 'NotoSansKR',
                           fontWeight: FontWeight.w600,
                           color: Color(0xffFF3F9B)),
