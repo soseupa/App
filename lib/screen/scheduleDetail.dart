@@ -47,7 +47,6 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     if (response.statusCode == 200) {
       scheduleDetails = values['scheduleDetails'];
       scheduleUsers = values['scheduleUsers'];
-      print(scheduleDetails);
 
       for (var user in scheduleUsers) {
         nickname = user['nickname'];
