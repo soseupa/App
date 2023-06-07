@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gaori/screen/AddScheduleUsers.dart';
+import 'package:gaori/screen/searchPlace.dart';
 
 import '../class/friendListUserInfo.dart';
 
@@ -103,7 +105,13 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
             ),
           ),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => searchPlacePage()), // Todo : 임시로 적어둔거라서 바꿔도 됨!!
+              );
+            },
             child: Text(
               '일정 추가하기',
               style: TextStyle(
