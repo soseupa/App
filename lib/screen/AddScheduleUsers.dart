@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
 
-import '../class/friendListUserInfo.dart';
 import 'Login.dart';
 
 class AddScheduleUsers extends StatefulWidget {
-  final List<friendListUserInfoModel> friendsList;
+  // final List<friendListUserInfoModel> friendsList;
 
-  const AddScheduleUsers({Key? key, required this.friendsList})
-      : super(key: key);
+  const AddScheduleUsers({Key? key}) : super(key: key);
 
   @override
   State<AddScheduleUsers> createState() => _AddScheduleUsersState();
@@ -18,7 +18,17 @@ class AddScheduleUsers extends StatefulWidget {
 
 class _AddScheduleUsersState extends State<AddScheduleUsers> {
   Token? inputData = InputData.inputData;
-  late TextEditingController controller;
+  bool showContainer = false;
+  List<dynamic> friendlist = [];
+  int length = 0;
+  String email = '';
+  String nickname = '';
+
+  @override
+  void initState() {
+    super.initState();
+    friendList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,75 +40,189 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-              Search(),
+              for (var friend in friendlist)
+                alreadyFriend(friend['email'], friend['nickname']),
             ])));
   }
 
-  SizedBox Search() {
-    Future<void> _searchEmail(final email) async {
-      String token = inputData?.token ?? "";
-      print(token);
+  Future<void> friendList() async {
+    String token = inputData?.token ?? "";
 
-      final url = Uri.parse('http://34.64.137.179:8080/auth/email/' + email);
-      final headers = {'Authorization': 'Bearer $token'};
-      final response = await http.get(url, headers: headers);
-      final responseBody = utf8.decode(response.bodyBytes);
-      Map<String, dynamic> decodeResponseBody = json.decode(responseBody);
-      // 응답 처리 로직 작성
-      if (response.statusCode == 200) {
-        // 요청이 성공했을 경우
-        print('요청이 성공했습니다.');
-        print('응답 본문: $responseBody');
-        final nickname = decodeResponseBody['nickname'];
-        final email = decodeResponseBody['email'];
-        print('닉네임: $nickname');
-        print('이메일: $email');
-      } else {
-        // 요청이 실패했을 경우
-        print('요청이 실패했습니다.');
-        print('응답 상태 코드: ${response.statusCode}');
+    final url = Uri.parse('http://34.64.137.179:8080/friend/list');
+    final headers = {'Authorization': 'Bearer $token'};
+    final response = await http.get(url, headers: headers);
+    final responseBody = utf8.decode(response.bodyBytes);
+    final values = json.decode(responseBody);
+    friendlist = values['friendList'];
+    length = friendlist.length;
+
+    if (response.statusCode == 200) {
+      // 응답 데이터 디코딩
+      for (var request in friendlist) {
+        email = request['email'];
+        nickname = request['nickname'];
+
+        setState(() {
+          email = request['email'];
+          nickname = request['nickname'];
+        });
+
+        alreadyFriend(email, nickname);
       }
+    } else {
+      // 요청 실패 처리
+      print("실패");
     }
+  }
 
-    final emailController = TextEditingController();
-    return SizedBox(
-      width: 400,
-      height: 50,
-      child: TextFormField(
-        controller: emailController,
-        decoration: InputDecoration(
-            hintText: '친구의 이메일을 검색해 보세요.',
-            hintStyle: TextStyle(
-              color: Color(0xffDEDEDE),
-            ),
-            border: InputBorder.none,
-            suffixIcon: InkWell(
-              onTap: () {
-                _searchEmail(emailController.text);
-              },
-              child: Icon(
-                Icons.search_rounded,
-                color: Color(0xffFF00A8),
-                size: 30,
+  SingleChildScrollView alreadyFriend(String email, String nickname) {
+    return SingleChildScrollView(
+      child: Column(children: [
+        Padding(
+            padding: EdgeInsets.only(top: 12.0),
+            child: Slidable(
+              endActionPane: ActionPane(
+                extentRatio: 0.25,
+                motion: ScrollMotion(),
+                children: [
+                  SlidableAction(
+                    onPressed: (context) {},
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: '친구 삭제',
+                  ),
+                ],
               ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: Color(0xffFCD8E9),
+              child: Center(
+                child: InkWell(
+                  onTap: () => alreadyFriends('$nickname'),
+                  child: Container(
+                    width: 360,
+                    height: 66,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Color(0xffF9F7F7)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 18.0),
+                              child: Text('$nickname',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600)),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 23),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text('$email',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontFamily: 'NotoSansKR',
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: Color(0xffFCD8E9),
-              ),
-            ),
-            filled: true,
-            fillColor: Color(0xffFDF7FA)),
-        // style: ,
-      ),
+            )),
+      ]),
     );
+  }
+
+  void alreadyFriends(String name) {
+    showAnimatedDialog(
+        context: context,
+        barrierDismissible: true,
+        animationType: DialogTransitionType.fadeScale,
+        duration: const Duration(milliseconds: 350),
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color(0xffECECEC),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0)),
+            //Dialog Main Title
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/image/taerae.png',
+                  height: 130,
+                  width: 130,
+                ),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Center(
+                  child: RichText(
+                      text: TextSpan(
+                          text: name,
+                          style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 17,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w600),
+                          children: const [
+                        TextSpan(
+                            text: '님을 추가하시겠습니까?',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: 'NotoSansKR',
+                              fontSize: 17,
+                            )),
+                      ])),
+                ),
+              ],
+            ),
+            actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffFF3F9B),
+                        elevation: 0,
+                        fixedSize: Size(120, 30)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("확인"),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xffCAC9C9),
+                        elevation: 0,
+                        fixedSize: Size(120, 30)),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text("취소"),
+                  )
+                ],
+              ),
+            ],
+          );
+        });
   }
 
   AppBar buildAppBar() {
