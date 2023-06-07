@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:gaori/screen/searchPlace.dart';
 import 'package:http/http.dart' as http;
 
 import 'AddScheduleUsers.dart';
@@ -184,10 +185,10 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                       InkWell(
                         onTap: () {
                           //TODO : 일정 추가 페이지 연결
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => HomePage()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => searchPlacePage()));
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
