@@ -105,73 +105,37 @@ class _LoginPageState extends State<LoginPage> {
           },
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(42.0),
-            child: Center(
-              child: Image.asset('assets/image/main_logo.png',
-                  width: 109, height: 117),
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(42.0),
+              child: Center(
+                child: Image.asset('assets/image/main_logo.png',
+                    width: 109, height: 117),
+              ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: Text(
-                  '이메일 입력',
-                  style: TextStyle(fontSize: 16),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0),
+                  child: Text(
+                    '이메일 입력',
+                    style: TextStyle(fontSize: 16),
+                  ),
                 ),
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 360,
-                      height: 48,
-                      child: TextField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: '이메일을 입력해주세요.',
-                          border: OutlineInputBorder(
-                            borderSide: BorderSide.none,
-                            borderRadius: BorderRadius.circular(14.0),
-                          ),
-                          filled: true,
-                          fillColor: Color(0xffF5F5F5),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12.0, top: 12),
-                child: Text(
-                  '비밀번호 입력',
-                  style: TextStyle(fontSize: 16),
-                ),
-              ),
-              Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    SizedBox(
-                      width: 360,
-                      child: TextField(
-                          obscureText: true,
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 360,
+                        height: 48,
+                        child: TextField(
+                          controller: emailController,
                           decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 12.0),
-                            hintText: '비밀번호를 입력해주세요.',
-                            errorText: !logincheck ? '비밀번호가 틀렸습니다.' : null,
-                            errorBorder: OutlineInputBorder(
-                              borderSide:
-                                  BorderSide(color: Colors.red, width: 2.0),
-                              borderRadius: BorderRadius.circular(14.0),
-                            ),
+                            hintText: '이메일을 입력해주세요.',
                             border: OutlineInputBorder(
                               borderSide: BorderSide.none,
                               borderRadius: BorderRadius.circular(14.0),
@@ -179,52 +143,90 @@ class _LoginPageState extends State<LoginPage> {
                             filled: true,
                             fillColor: Color(0xffF5F5F5),
                           ),
-                          controller: passwordController,
-                          onChanged: (value) {
-                            Login(
-                                emailController.text, passwordController.text);
-                            _updateButtonState();
-                          }),
-                    ),
-                  ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.only(top: 54.0),
-              child: ElevatedButton(
-                onPressed: _isButtonEnabled
-                    ? () {
-                        Login(emailController.text, passwordController.text);
-                        if (logincheck) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MapPage(
-                                      name: name,
-                                    )),
-                          );
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 12.0, top: 12),
+                  child: Text(
+                    '비밀번호 입력',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ),
+                Container(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(
+                        width: 360,
+                        child: TextField(
+                            obscureText: true,
+                            decoration: InputDecoration(
+                              contentPadding:
+                                  EdgeInsets.symmetric(horizontal: 12.0),
+                              hintText: '비밀번호를 입력해주세요.',
+                              errorText: !logincheck ? '비밀번호가 틀렸습니다.' : null,
+                              errorBorder: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Colors.red, width: 2.0),
+                                borderRadius: BorderRadius.circular(14.0),
+                              ),
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide.none,
+                                borderRadius: BorderRadius.circular(14.0),
+                              ),
+                              filled: true,
+                              fillColor: Color(0xffF5F5F5),
+                            ),
+                            controller: passwordController,
+                            onChanged: (value) {
+                              Login(
+                                  emailController.text, passwordController.text);
+                              _updateButtonState();
+                            }),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 54.0),
+                child: ElevatedButton(
+                  onPressed: _isButtonEnabled
+                      ? () {
+                          Login(emailController.text, passwordController.text);
+                          if (logincheck) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MapPage(
+                                        name: name,
+                                      )),
+                            );
+                          }
+                          setState(() => isButtonActive = false);
                         }
-                        setState(() => isButtonActive = false);
-                      }
-                    : null,
-                child: Text(
-                  "완료",
-                  style: TextStyle(color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                  onSurface: Color(0xffFF419C),
-                  backgroundColor: Color(0xffFF419C),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14.0)),
-                  minimumSize: Size(360, 48),
+                      : null,
+                  child: Text(
+                    "완료",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    onSurface: Color(0xffFF419C),
+                    backgroundColor: Color(0xffFF419C),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14.0)),
+                    minimumSize: Size(360, 48),
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
