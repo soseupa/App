@@ -24,12 +24,18 @@ class MapPage extends StatefulWidget {
 }
 
 class _MapPageState extends State<MapPage> {
-  // CalendarController _calendarController;
   Token? inputData = InputData.inputData;
   final List<friendListUserInfoModel> friendsList = <friendListUserInfoModel>[];
   var json_data;
   int scheduleLength = 0;
-  List<Schedule_task> schedules = [];
+
+  List<dynamic> schedules = [];
+  List<dynamic> scheduleUsers = [];
+  List<ScheduleUser> users = [];
+  String nickname = '';
+  String title = '';
+  var userId = 0;
+  var scheduleId = 0;
   List<Widget> scheduleWidget = [];
 
   DateTime selectedDay = DateTime(
@@ -38,11 +44,13 @@ class _MapPageState extends State<MapPage> {
     DateTime.now().day,
   );
   DateTime focusedDay = DateTime.now();
-@override
+
+  @override
   void initState() {
     super.initState();
     _searchSchedule();
   }
+
   @override
   Widget build(BuildContext context) {
     var month = DateTime.now().month;
@@ -56,11 +64,12 @@ class _MapPageState extends State<MapPage> {
             buildCalendarBody(_now, selectedDay, focusedDay),
             PlusButton(widget.name, selectedDay),
             Column(
-              children: scheduleWidget,
-            ),
-            // TaskList()
-
-            // Test()
+              children: [
+                for (var schedule in schedules)
+                  Schedules(schedule['title'], schedule['scheduleId'],
+                      schedule['scheduleUsers']),
+              ],
+            )
           ],
         ));
   }
@@ -76,29 +85,32 @@ class _MapPageState extends State<MapPage> {
     if (response.statusCode == 200) {
       // 요청이 성공했을 경우
       schedules.clear();
-      print(focusedDay.toString());
       print('요청이 성공했습니다.');
       Map<String, dynamic> jsonData = json.decode(responseBody);
       scheduleLength = decodeResponseBody['length'];
-      for (int i = 0; i < scheduleLength; i++) {
-        List<ScheduleUser> scheduleUsers = [];
-        scheduleUsers.clear();
-        int userLength = jsonData['schedules'][i]['scheduleUsers'].length;
-        print(userLength);
-        for (int j = 0; j < userLength; j++) {
-          print(jsonData['schedules'][i]['scheduleUsers'][j]['nickname']);
-          scheduleUsers.add(ScheduleUser(
-              jsonData['schedules'][i]['scheduleUsers'][j]['userId'],
-              jsonData['schedules'][i]['scheduleUsers'][j]['nickname']));
-          print(scheduleUsers[j].name);
+      schedules = decodeResponseBody['schedules'];
+      for (var schedule in schedules) {
+        scheduleId = schedule['scheduleId'];
+        title = schedule['title'];
+        scheduleUsers = schedule['scheduleUsers'];
+        for (var scheduleUser in scheduleUsers) {
+          userId = scheduleUser['userId'];
+          nickname = scheduleUser['nickname'];
+          setState(() {
+            userId = scheduleUser['userId'];
+            nickname = scheduleUser['nickname'];
+          });
+          users.add(ScheduleUser(userId, nickname));
         }
-
-        String title = jsonData['schedules'][i]['title'];
-        int id = jsonData['schedules'][i]['scheduleId'];
-        schedules.add(Schedule_task(id, title, scheduleUsers));
+        setState(() {
+          scheduleId = schedule['scheduleId'];
+          title = schedule['title'];
+          scheduleUsers = schedule['scheduleUsers'];
+        });
+        Schedules(title, scheduleId, users);
       }
       setState(() {
-        scheduleWidget = Schedules(schedules);
+        Schedules(title, scheduleId, scheduleUsers);
       });
     } else {
       // 요청이 실패했을 경우
@@ -107,68 +119,63 @@ class _MapPageState extends State<MapPage> {
     }
   }
 
-  List<Widget> Schedules(List<Schedule_task> schedules) {
-    List<Widget> result = [];
-    scheduleWidget.clear();
-    for (int i = 0; i < schedules.length; i++) {
-      result.add(Padding(
-        padding: const EdgeInsets.only(top: 15),
-        child: SizedBox(
-          width: 360,
-          height: 80,
-          child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                fixedSize: Size(30, 30),
-                elevation: 0,
-                backgroundColor: Color(0xffF9F7F7),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(14.78),
-                ),
+  Padding Schedules(String title, int userId, List<dynamic> scheduleUsers) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 15),
+      child: SizedBox(
+        width: 360,
+        height: 80,
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              fixedSize: Size(30, 30),
+              elevation: 0,
+              backgroundColor: Color(0xffF9F7F7),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14.78),
               ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ScheduleDetailPage(
-                            id: schedules[i].id,
-                            title: schedules[i].title,
-                          )),
-                );
-              },
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${schedules[i].title}",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontFamily: 'NotoSansKR',
-                        fontWeight: FontWeight.w600),
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ScheduleDetailPage(
+                          id: userId,
+                          title: title,
+                        )),
+              );
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "$title",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontFamily: 'NotoSansKR',
+                      fontWeight: FontWeight.w600),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 3.0),
+                  child: Row(
+                    children: [
+                      for (int j = 0; j < scheduleUsers.length; j++)
+                        Text(
+                          '${scheduleUsers[j]['nickname']} ',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                              fontFamily: 'NotoSansKR',
+                              fontWeight: FontWeight.w400),
+                        )
+                    ],
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Row(
-                      children: [
-                        for (int j = 0; j < schedules[i].friends.length; j++)
-                          Text(
-                            '${schedules[j].friends[j].name}',
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontFamily: 'NotoSansKR',
-                                fontWeight: FontWeight.w400),
-                          )
-                      ],
-                    ),
-                  )
-                ],
-              )),
-        ),
-      ));
-    }
-    return result;
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   Row PlusButton(String user, DateTime selectedDay) {
@@ -244,7 +251,7 @@ class _MapPageState extends State<MapPage> {
               this.selectedDay = selectedDay;
               this.focusedDay = focusedDay;
               _searchSchedule();
-              scheduleWidget = Schedules(schedules);
+              // scheduleWidget = Schedules(schedules);
             });
           }
         },
