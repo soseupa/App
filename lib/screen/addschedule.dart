@@ -16,6 +16,7 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
         title: Text(
@@ -57,44 +58,46 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 50.0),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  width: 320,
-                  height: 60,
-                  child: TextFormField(
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontFamily: 'NotoSansKR',
-                        color: Colors.black,
-                        fontSize: 20,
-                      ),
-                      decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                            color: Color(0xffFCD8E9),
-                          ),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10)),
-                          borderSide: BorderSide(
-                            color: Color(0xffFCD8E9),
-                          ),
-                        ),
-                        filled: true,
-                        fillColor: Color(0xffFDF7FA),
-                        hintText: '제목을 입력해주세요',
-                        hintStyle: TextStyle(
+          SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 50.0),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: Container(
+                    width: 320,
+                    height: 60,
+                    child: TextFormField(
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
                           fontFamily: 'NotoSansKR',
-                          color: Color(0xffDEDEDE),
-                          fontSize: 18,
+                          color: Colors.black,
+                          fontSize: 20,
                         ),
-                        border: InputBorder.none,
-                      )),
+                        decoration: InputDecoration(
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              color: Color(0xffFCD8E9),
+                            ),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(10)),
+                            borderSide: BorderSide(
+                              color: Color(0xffFCD8E9),
+                            ),
+                          ),
+                          filled: true,
+                          fillColor: Color(0xffFDF7FA),
+                          hintText: '제목을 입력해주세요',
+                          hintStyle: TextStyle(
+                            fontFamily: 'NotoSansKR',
+                            color: Color(0xffDEDEDE),
+                            fontSize: 18,
+                          ),
+                          border: InputBorder.none,
+                        )),
+                  ),
                 ),
               ),
             ),
