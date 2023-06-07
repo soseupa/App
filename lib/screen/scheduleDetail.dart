@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'AddScheduleUsers.dart';
+
 class ScheduleDetailPage extends StatefulWidget {
   final int id;
   final String title;
@@ -33,7 +35,9 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
             padding: const EdgeInsets.only(right: 10.0),
             child: Center(
               child: InkWell(
-                onTap: () {},
+                onTap: () {
+                  Navigator.pop(context);
+                },
                 child: const Text('저장',
                     style: TextStyle(
                         fontSize: 18,
@@ -92,8 +96,8 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                       size: 35,
                     ),
                     onTap: () {
-                      // Navigator.push(context,
-                      // MaterialPageRoute(builder: (context) => AddScheduleUsers(friendsList: friendsList,)));
+                      Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => AddScheduleUsers()));
                     },
                   ),
                 ),
