@@ -19,8 +19,15 @@ class ScheduleDetailPage extends StatefulWidget {
 class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
   Token? inputData = InputData.inputData;
   List<dynamic> scheduleUsers = [];
+  List<dynamic> scheduleDetails = [];
   String nickname = '';
   int userId = 0;
+  String title = '';
+  String location = '';
+  double latitude = 0;
+  double longitude = 0;
+  var order = 0;
+  var id = 0;
 
   @override
   void initState() {
@@ -38,17 +45,35 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     final responseBody = utf8.decode(response.bodyBytes);
     final values = json.decode(responseBody);
     if (response.statusCode == 200) {
+      scheduleDetails = values['scheduleDetails'];
       scheduleUsers = values['scheduleUsers'];
+      print(scheduleDetails);
+
       for (var user in scheduleUsers) {
         nickname = user['nickname'];
         userId = user['userId'];
-        print(user['nickname']);
-        print(user['userId']);
         setState(() {
           nickname = user['nickname'];
           userId = user['userId'];
         });
         scheduleuser(nickname, userId);
+      }
+      for (var detail in scheduleDetails) {
+        title = detail['title'];
+        location = detail['location'];
+        latitude = detail['latitude'];
+        longitude = detail['longitude'];
+        order = detail['orderIndex'];
+        id = detail['id'];
+        setState(() {
+          title = detail['title'];
+          location = detail['location'];
+          latitude = detail['latitude'];
+          longitude = detail['longitude'];
+          order = detail['orderIndex'];
+          id = detail['id'];
+        });
+        tasks(title, location, latitude, longitude, order, id);
       }
     } else {
       // 요청 실패 처리
@@ -130,45 +155,9 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                     ),
                   ]),
             ),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  width: 360,
-                  height: 80,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Color(0xffF9F7F7), width: 3),
-                      color: Color(0xffF9F7F7)),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10.0,
-                        ),
-                        child: Text("밥먹기",
-                            style: TextStyle(
-                                fontSize: 16,
-                                fontFamily: 'NotoSansKR',
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600)),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10.0, top: 3),
-                        child: Text('맥도날드 김해삼정DT점',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontFamily: 'NotoSansKR',
-                                color: Colors.black,
-                                fontWeight: FontWeight.w400)),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            for (var detail in scheduleDetails)
+              tasks(detail['title'], detail['location'], detail['latitude'],
+                  detail['longitude'], detail['order'], detail['id']),
             Center(
               child: Padding(
                 padding: const EdgeInsets.only(top: 10.0),
@@ -225,6 +214,49 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Center tasks(String title, String location, double latitude, double longitude,
+      int? order, int? id) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: Container(
+          width: 360,
+          height: 80,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15),
+              border: Border.all(color: Color(0xffF9F7F7), width: 3),
+              color: Color(0xffF9F7F7)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                  left: 10.0,
+                ),
+                child: Text("$title",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'NotoSansKR',
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600)),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 10.0, top: 3),
+                child: Text('$location',
+                    style: TextStyle(
+                        fontSize: 15,
+                        fontFamily: 'NotoSansKR',
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400)),
+              ),
+            ],
+          ),
         ),
       ),
     );
