@@ -325,11 +325,9 @@ class _FriendsListPageState extends State<FriendsListPage> {
     final emailController = TextEditingController();
     return SizedBox(
       width: 360,
-      height: 50,
       child: TextFormField(
         controller: emailController,
-        // textAlignVertical: TextAlignVertical.center,
-        textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
         decoration: InputDecoration(
             hintText: '친구의 이메일을 검색해 보세요.',
             hintStyle: TextStyle(
