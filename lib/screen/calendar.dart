@@ -11,7 +11,6 @@ import 'package:table_calendar/table_calendar.dart';
 import '../class/schedule.dart';
 import 'Login.dart';
 import 'friendslist.dart';
-import 'homepage.dart';
 
 class MapPage extends StatefulWidget {
   final String name;
@@ -345,15 +344,9 @@ class _MapPageState extends State<MapPage> {
       title: Row(mainAxisAlignment: MainAxisAlignment.spaceAround, children: [
         Padding(
           padding: const EdgeInsets.only(top: 10),
-          child: InkWell(
-            onTap: () {
-              Navigator.push(
-                  context, MaterialPageRoute(builder: (context) => HomePage()));
-            },
-            child: Image.asset(
-              'assets/image/mainlogo.png',
-              height: 35,
-            ),
+          child: Image.asset(
+            'assets/image/mainlogo.png',
+            height: 35,
           ),
         ),
         const SizedBox(
