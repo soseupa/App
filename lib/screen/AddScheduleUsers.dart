@@ -43,13 +43,15 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
         backgroundColor: const Color(0xffFFFFFF),
         appBar: buildAppBar(),
         body: Center(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-              for (var friend in friendlist)
-                alreadyFriend(friend['email'], friend['nickname']),
-            ])));
+            child: SingleChildScrollView(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                for (var friend in friendlist)
+                  alreadyFriend(friend['email'], friend['nickname']),
+              ]),
+            )));
   }
 
   Future<void> addFriendToSchedule(String selectedEmail) async {
@@ -62,9 +64,36 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     if (response.statusCode == 200) {
       // 응답 데이터 디코딩
       print("성공");
+      // showAboutDialog(context: context)
     } else {
       // 요청 실패 처리
       print("실패");
+      final responseBody = utf8.decode(response.bodyBytes);
+      final Map<String, dynamic> responseData = json.decode(responseBody);
+      final String message = responseData['message'];
+      print(message);
+      if(message == "이미 존재하는 사용자입니다.") {
+        //TODO 경고창으로 Dialog 띄우기
+        showAnimatedDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (BuildContext context) {
+            return ClassicGeneralDialogWidget(
+              titleText: '이미 존재하는 사용자입니다.',
+              contentText: '다른 사용자를 선택해주세요.',
+              onPositiveClick: () {
+                Navigator.of(context).pop();
+              },
+              onNegativeClick: () {
+                Navigator.of(context).pop();
+              },
+            );
+          },
+          animationType: DialogTransitionType.slideFromBottomFade,
+          curve: Curves.fastOutSlowIn,
+          duration: Duration(milliseconds: 500),
+        );
+      }
     }
   }
 
@@ -98,74 +127,72 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     }
   }
 
-  SingleChildScrollView alreadyFriend(String Email, String nickname) {
-    return SingleChildScrollView(
-      child: Column(children: [
-        Padding(
-            padding: EdgeInsets.only(top: 12.0),
-            child: Slidable(
-              endActionPane: ActionPane(
-                extentRatio: 0.25,
-                motion: ScrollMotion(),
-                children: [
-                  SlidableAction(
-                    onPressed: (context) {},
-                    backgroundColor: Colors.red,
-                    foregroundColor: Colors.white,
-                    icon: Icons.delete,
-                    label: '친구 삭제',
-                  ),
-                ],
-              ),
-              child: Center(
-                child: InkWell(
-                  onTap: () => alreadyFriends('$nickname', '$Email'),
-                  child: Container(
-                    width: 360,
-                    height: 66,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xffF9F7F7)),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
+  Column alreadyFriend(String Email, String nickname) {
+    return Column(children: [
+      Padding(
+          padding: EdgeInsets.only(top: 12.0),
+          child: Slidable(
+            endActionPane: ActionPane(
+              extentRatio: 0.25,
+              motion: ScrollMotion(),
+              children: [
+                SlidableAction(
+                  onPressed: (context) {},
+                  backgroundColor: Colors.red,
+                  foregroundColor: Colors.white,
+                  icon: Icons.delete,
+                  label: '친구 삭제',
+                ),
+              ],
+            ),
+            child: Center(
+              child: InkWell(
+                onTap: () => alreadyFriends('$nickname', '$Email'),
+                child: Container(
+                  width: 360,
+                  height: 66,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffF9F7F7)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(left: 18.0),
+                            child: Text('$nickname',
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'NotoSansKR',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(right: 23),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(left: 18.0),
-                              child: Text('$nickname',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontFamily: 'NotoSansKR',
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600)),
-                            ),
+                            Text('$Email',
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    fontFamily: 'NotoSansKR',
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400)),
                           ],
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(right: 23),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text('$email',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'NotoSansKR',
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
-            )),
-      ]),
-    );
+            ),
+          )),
+    ]);
   }
 
   void alreadyFriends(String name, String Email) {
