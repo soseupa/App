@@ -34,11 +34,11 @@ class _FriendsListPageState extends State<FriendsListPage> {
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),
       appBar: buildAppBar(),
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Search(),
               if (showContainer == false)
