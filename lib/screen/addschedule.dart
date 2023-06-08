@@ -80,14 +80,9 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
         elevation: 0,
       ),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 200, bottom: 10.0),
-            child: Image.asset("assets/image/juhomin.png",
-                width: 160, height: 120, fit: BoxFit.fill),
-          ),
           Center(
             child: Container(
               width: 250,

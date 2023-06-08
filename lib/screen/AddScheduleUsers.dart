@@ -185,7 +185,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(
-                  'assets/image/taerae.png',
+                  'assets/image/friendrequeset.png',
                   height: 130,
                   width: 130,
                 ),
