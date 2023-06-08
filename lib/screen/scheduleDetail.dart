@@ -135,34 +135,37 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
           children: [
             Padding(
               padding: const EdgeInsets.only(top: 8.0),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 21.0),
-                    ),
-                    for (var user in scheduleUsers)
-                      scheduleuser(user['nickname'], user['userId']),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 10.0, left: 8),
-                      child: InkWell(
-                        child: Icon(
-                          Icons.add_circle,
-                          color: Color(0xffFF3F9B),
-                          size: 35,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => AddScheduleUsers(
-                                        id: widget.id,
-                                      )));
-                        },
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 21.0),
                       ),
-                    ),
-                  ]),
+                      for (var user in scheduleUsers)
+                        scheduleuser(user['nickname'], user['userId']),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0, left: 8,right: 20),
+                        child: InkWell(
+                          child: Icon(
+                            Icons.add_circle,
+                            color: Color(0xffFF3F9B),
+                            size: 35,
+                          ),
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddScheduleUsers(
+                                          id: widget.id,
+                                        )));
+                          },
+                        ),
+                      ),
+                    ]),
+              ),
             ),
             for (var detail in scheduleDetails)
               tasks(detail['title'], detail['location'], detail['latitude'],
@@ -184,7 +187,6 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                     children: [
                       InkWell(
                         onTap: () {
-                          //TODO : 일정 추가 페이지 연결
                           Navigator.push(
                               context,
                               MaterialPageRoute(
