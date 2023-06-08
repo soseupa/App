@@ -67,8 +67,10 @@ class _NoticePageState extends State<NoticePage> {
       appBar: buildAppBar(),
       body: ListView(children: [
         Center(
-          child: Column(
-            children: [for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])],
+          child: SingleChildScrollView(
+            child: Column(
+              children: [for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])],
+            ),
           ),
         ),
       ]),

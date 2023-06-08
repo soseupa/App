@@ -35,18 +35,20 @@ class _FriendsListPageState extends State<FriendsListPage> {
       backgroundColor: const Color(0xffFFFFFF),
       appBar: buildAppBar(),
       body: Center(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Search(),
-            if (showContainer == false)
-              for (var friend in friendlist)
-                alreadyFriend(friend['email'], friend['nickname']),
-            if (showContainer) NotFriend(),
-            //for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])
-            // HavenoFriend(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Search(),
+              if (showContainer == false)
+                for (var friend in friendlist)
+                  alreadyFriend(friend['email'], friend['nickname']),
+              if (showContainer) NotFriend(),
+              //for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])
+              // HavenoFriend(),
+            ],
+          ),
         ),
       ),
     );
