@@ -63,13 +63,21 @@ class _MapPageState extends State<MapPage> {
             buildCalendarHeader(month),
             buildCalendarBody(_now, selectedDay, focusedDay),
             PlusButton(widget.name, selectedDay),
-            Column(
-              children: [
-                for (var schedule in schedules)
-                  Schedules(schedule['title'], schedule['scheduleId'],
-                      schedule['scheduleUsers']),
-              ],
-            )
+            Expanded(
+              child: Container(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height - 50),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      for (var schedule in schedules)
+                        Schedules(schedule['title'], schedule['scheduleId'],
+                            schedule['scheduleUsers']),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ));
   }
@@ -190,8 +198,12 @@ class _MapPageState extends State<MapPage> {
           padding: const EdgeInsets.only(right: 35.0),
           child: InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => AddSchedulePage(date: selectedDay,)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => AddSchedulePage(
+                              date: selectedDay,
+                            )));
               },
               child: Icon(
                 Icons.add,
