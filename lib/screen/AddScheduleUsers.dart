@@ -29,6 +29,7 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     super.initState();
     friendList();
   }
+
   // @override
   // void dispose() {
   //   setState(() {
@@ -44,14 +45,14 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
         appBar: buildAppBar(),
         body: Center(
             child: SingleChildScrollView(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
                 for (var friend in friendlist)
                   alreadyFriend(friend['email'], friend['nickname']),
               ]),
-            )));
+        )));
   }
 
   Future<void> addFriendToSchedule(String selectedEmail) async {
@@ -72,27 +73,69 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
       final Map<String, dynamic> responseData = json.decode(responseBody);
       final String message = responseData['message'];
       print(message);
-      if(message == "이미 존재하는 사용자입니다.") {
-        //TODO 경고창으로 Dialog 띄우기
+      if (message == "이미 존재하는 사용자입니다.") {
         showAnimatedDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (BuildContext context) {
-            return ClassicGeneralDialogWidget(
-              titleText: '이미 존재하는 사용자입니다.',
-              contentText: '다른 사용자를 선택해주세요.',
-              onPositiveClick: () {
-                Navigator.of(context).pop();
-              },
-              onNegativeClick: () {
-                Navigator.of(context).pop();
-              },
-            );
-          },
-          animationType: DialogTransitionType.slideFromBottomFade,
-          curve: Curves.fastOutSlowIn,
-          duration: Duration(milliseconds: 500),
-        );
+            context: context,
+            barrierDismissible: true,
+            animationType: DialogTransitionType.fadeScale,
+            duration: const Duration(milliseconds: 350),
+            builder: (BuildContext context) {
+              return AlertDialog(
+                backgroundColor: const Color(0xffECECEC),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0)),
+                //Dialog Main Title
+                title: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Icon(
+                            Icons.cancel_rounded,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Image.asset(
+                      'assets/image/ggamnol.png',
+                      height: 100,
+                    ),
+                  ],
+                ),
+                content: Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Center(
+                        child: Text('이미 추가된 친구예요!',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w600,
+                              fontFamily: 'NotoSansKR',
+                              fontSize: 18,
+                            )),
+                      ),
+                      const Center(
+                        child: Text('한 번 추가한 친구 다시 추가할 수 없어요.',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w200,
+                              fontFamily: 'NotoSansKR',
+                              fontSize: 13,
+                            )),
+                      )
+                    ],
+                  ),
+                ),
+              );
+            });
       }
     }
   }
