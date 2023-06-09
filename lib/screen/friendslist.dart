@@ -129,7 +129,7 @@ class _FriendsListPageState extends State<FriendsListPage> {
     return SingleChildScrollView(
       child: Column(children: [
         Padding(
-            padding: EdgeInsets.only(top: 12.0),
+            padding: EdgeInsets.only(bottom: 12),
             child: Slidable(
               endActionPane: ActionPane(
                 extentRatio: 0.25,
@@ -323,50 +323,53 @@ class _FriendsListPageState extends State<FriendsListPage> {
   //   return
   // }
 
-  SizedBox Search() {
+  Padding Search() {
     final emailController = TextEditingController();
-    return SizedBox(
-      width: 360,
-      child: TextFormField(
-        controller: emailController,
-        textAlignVertical: TextAlignVertical.center,
-        decoration: InputDecoration(
-            hintText: '친구의 이메일을 검색해 보세요.',
-            hintStyle: TextStyle(
-              color: Color(0xffDEDEDE),
-              fontSize: 15,
-              fontFamily: 'NotoSansKR',
-            ),
-            border: InputBorder.none,
-            suffixIcon: InkWell(
-              onTap: () {
-                _searchEmail(emailController.text);
-                setState(() {
-                  searchedEmail = emailController.text;
-                  searchedNickname;
-                });
-              },
-              child: Icon(
-                Icons.search_rounded,
-                color: Color(0xffFF00A8),
-                size: 30,
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12.0),
+      child: SizedBox(
+        width: 360,
+        child: TextFormField(
+          controller: emailController,
+          textAlignVertical: TextAlignVertical.center,
+          decoration: InputDecoration(
+              hintText: '친구의 이메일을 검색해 보세요.',
+              hintStyle: TextStyle(
+                color: Color(0xffDEDEDE),
+                fontSize: 15,
+                fontFamily: 'NotoSansKR',
               ),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: Color(0xffFCD8E9),
+              border: InputBorder.none,
+              suffixIcon: InkWell(
+                onTap: () {
+                  _searchEmail(emailController.text);
+                  setState(() {
+                    searchedEmail = emailController.text;
+                    searchedNickname;
+                  });
+                },
+                child: Icon(
+                  Icons.search_rounded,
+                  color: Color(0xffFF00A8),
+                  size: 30,
+                ),
               ),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(10)),
-              borderSide: BorderSide(
-                color: Color(0xffFCD8E9),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(
+                  color: Color(0xffFCD8E9),
+                ),
               ),
-            ),
-            filled: true,
-            fillColor: Color(0xffFDF7FA)),
-        // style: ,
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                borderSide: BorderSide(
+                  color: Color(0xffFCD8E9),
+                ),
+              ),
+              filled: true,
+              fillColor: Color(0xffFDF7FA)),
+          // style: ,
+        ),
       ),
     );
   }
