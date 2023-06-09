@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:gaori/screen/map.dart';
 import 'package:gaori/screen/searchPlace.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,12 +30,14 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
   double longitude = 0;
   var order = 0;
   var id = 0;
+  int scheduleCount = 0;
 
   @override
   void initState() {
     super.initState();
     findScheduleDetails();
   }
+
   // @override
   // void dispose() {
   //   setState(() {
@@ -55,6 +58,8 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     if (response.statusCode == 200) {
       scheduleDetails = values['scheduleDetails'];
       scheduleUsers = values['scheduleUsers'];
+      scheduleCount = scheduleDetails.length;
+      print('개수 : ${scheduleDetails.length}');
 
       for (var user in scheduleUsers) {
         nickname = user['nickname'];
@@ -73,6 +78,7 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
         order = detail['orderIndex'];
         id = detail['id'];
         setState(() {
+          scheduleCount = scheduleDetails.length;
           title = detail['title'];
           location = detail['location'];
           latitude = detail['latitude'];
@@ -95,15 +101,13 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
       appBar: AppBar(
         toolbarHeight: 60,
         iconTheme: IconThemeData(color: Colors.black),
-        title: Center(
-          child: Text(
-            '${widget.title}',
-            style: TextStyle(
-                color: Colors.black,
-                fontSize: 19,
-                fontFamily: 'NotoSansKR',
-                fontWeight: FontWeight.w600),
-          ),
+        title: Text(
+          '${widget.title}',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 19,
+              fontFamily: 'NotoSansKR',
+              fontWeight: FontWeight.w600),
         ),
         actions: [
           Padding(
@@ -111,11 +115,35 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
             child: Center(
               child: InkWell(
                 onTap: () {
-                  Navigator.pop(context);
+                  if (scheduleCount == 0) {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('일정을 추가해주세요!'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          );
+                        });
+                  } else {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapPage(
+                                  id: widget.id,
+                                  title: widget.title,
+                                )));
+                  }
                 },
-                child: const Text('저장',
+                child: const Text('지도로 보기',
                     style: TextStyle(
-                        fontSize: 18,
+                        fontSize: 17,
                         fontFamily: 'NotoSansKR',
                         color: Color(0xffFF3F9B),
                         fontWeight: FontWeight.w400)),
@@ -147,7 +175,8 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                       for (var user in scheduleUsers)
                         scheduleuser(user['nickname'], user['userId']),
                       Padding(
-                        padding: const EdgeInsets.only(top: 10.0, left: 8,right: 20),
+                        padding: const EdgeInsets.only(
+                            top: 10.0, left: 8, right: 20),
                         child: InkWell(
                           child: Icon(
                             Icons.add_circle,
