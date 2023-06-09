@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:gaori/screen/map.dart';
 import 'package:gaori/screen/searchPlace.dart';
 import 'package:http/http.dart' as http;
@@ -116,19 +117,66 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
               child: InkWell(
                 onTap: () {
                   if (scheduleCount == 0) {
-                    showDialog(
+                    showAnimatedDialog(
                         context: context,
+                        barrierDismissible: true,
+                        animationType: DialogTransitionType.fadeScale,
+                        duration: const Duration(milliseconds: 350),
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('일정을 추가해주세요!'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text('확인'),
+                            backgroundColor: const Color(0xffECECEC),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0)),
+                            //Dialog Main Title
+                            title: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Icon(
+                                        Icons.cancel_rounded,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Image.asset(
+                                  'assets/image/ggamnol.png',
+                                  height: 100,
+                                ),
+                              ],
+                            ),
+                            content: Padding(
+                              padding: const EdgeInsets.only(bottom: 20.0),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Center(
+                                    child: Text('일정을 추가해 주세요!',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                          fontFamily: 'NotoSansKR',
+                                          fontSize: 18,
+                                        )),
+                                  ),
+                                  const Center(
+                                    child: Text('하나 이상의 일정이 추가되어야 저장할 수 있어요.',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w200,
+                                          fontFamily: 'NotoSansKR',
+                                          fontSize: 13,
+                                        )),
+                                  )
+                                ],
                               ),
-                            ],
+                            ),
                           );
                         });
                   } else {
