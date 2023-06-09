@@ -31,7 +31,7 @@ dependencies:
   flutter_native_splash: ^2.2.19
   flutter_launcher_icons: ^0.13.0
   table_calendar: ^3.0.9
-  kakaomap_webview: ^0.3.0
+#  kakaomap_webview: ^0.3.0
   flutter_swipe_action_cell: ^3.1.0
   flutter_animated_dialog: ^2.0.1
   flutter_slidable: ^1.0.0-dev.3
@@ -39,6 +39,8 @@ dependencies:
   intl: ^0.18.0
   floating_pullup_card: ^1.2.0
   geolocator: ^7.3.3
+  webview_flutter: ^4.0.7
+  http: ^0.13.3
 
   flutter:
     sdk: flutter
@@ -85,6 +87,7 @@ flutter:
     - assets/image/juhomin.png
     - assets/image/taerae.png
     - assets/image/select.png
+    - assets/image/ggamnol.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
