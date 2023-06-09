@@ -45,13 +45,16 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
         appBar: buildAppBar(),
         body: Center(
             child: SingleChildScrollView(
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                for (var friend in friendlist)
-                  alreadyFriend(friend['email'], friend['nickname']),
-              ]),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 12.0),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  for (var friend in friendlist)
+                    alreadyFriend(friend['email'], friend['nickname']),
+                ]),
+          ),
         )));
   }
 
