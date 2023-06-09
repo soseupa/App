@@ -124,6 +124,7 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                         duration: const Duration(milliseconds: 350),
                         builder: (BuildContext context) {
                           return AlertDialog(
+                            elevation: 0,
                             backgroundColor: const Color(0xffECECEC),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10.0)),
@@ -254,8 +255,6 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                   width: 360,
                   height: 85,
                   decoration: BoxDecoration(
-                      // color: Color(0xffF9F7F7),
-                      // color: Color(0xffFF3F9B),
                       borderRadius: BorderRadius.circular(15),
                       border: Border.all(color: Color(0xffF9F7F7), width: 3),
                       color: Color(0xffF9F7F7)),
