@@ -49,8 +49,7 @@ class _MapPageState extends State<MapPage> {
               color: Colors.black,
               fontSize: 19,
               fontFamily: 'NotoSansKR',
-              fontWeight: FontWeight.w600
-          ),
+              fontWeight: FontWeight.w600),
         ),
         backgroundColor: Colors.white,
       ),
