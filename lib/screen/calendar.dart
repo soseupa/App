@@ -141,8 +141,8 @@ class _MapPageState extends State<MapPage> {
                 borderRadius: BorderRadius.circular(14.78),
               ),
             ),
-            onPressed: () {
-              Navigator.push(
+            onPressed: () async {
+              await Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => ScheduleDetailPage(
@@ -197,8 +197,8 @@ class _MapPageState extends State<MapPage> {
         Padding(
           padding: const EdgeInsets.only(right: 35.0),
           child: InkWell(
-              onTap: () {
-                Navigator.push(
+              onTap: () async{
+                await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddSchedulePage(
@@ -315,14 +315,17 @@ class _MapPageState extends State<MapPage> {
                 fontFamily: 'NotoSansKR',
                 fontWeight: FontWeight.w500),
             defaultDecoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(7.39)),
+                shape: BoxShape.circle,
+                // borderRadius: BorderRadius.circular(7.39)
+            ),
             selectedDecoration: BoxDecoration(
+              shape: BoxShape.rectangle,
                 // color: Color(0xffFBEFF5),
                 color: Color(
                   0xffF9F7F7,
                 ),
-                borderRadius: BorderRadius.circular(7.39)),
+                // borderRadius: BorderRadius.circular(7.39)
+            ),
             markersAutoAligned: true,
             markerSize: 100,
             markerSizeScale: 50,
