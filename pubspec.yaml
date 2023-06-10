@@ -41,6 +41,8 @@ dependencies:
   geolocator: ^7.3.3
   webview_flutter: ^4.0.7
   http: ^0.13.3
+  fluttertoast: ^8.0.9
+  flutter_screenutil: ^5.5.3
 
   flutter:
     sdk: flutter
