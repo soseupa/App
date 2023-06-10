@@ -23,6 +23,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isButtonActive = false;
   bool _isButtonEnabled = false;
   bool logincheck = true;
+  bool logindoublecheck = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   String name = '';
@@ -43,19 +44,29 @@ class _LoginPageState extends State<LoginPage> {
       name = responseData['name'];
       Token token = Token(token : accessToken, email : email);
       InputData.inputData = token;
-      print(accessToken);
 
       // 서버로부터 받은 응답 처리
       if (response.statusCode == 200 && password.length > 0) {
         logincheck = true;
         print("로그인성공");
+        setState(() {
+          logincheck=true;
+        });
         final responseData = jsonDecode(response.body);
       } else {
         logincheck = false;
+        logindoublecheck = false;
+        setState(() {
+          logincheck = false;
+          logindoublecheck = false;
+        });
         print("로그인실패");
       }
     } catch (error) {
-      logincheck = false;
+      setState(() {
+        logincheck = false;
+        logindoublecheck = false;
+      });
       print('로그인 요청 실패: $error');
     }
   }
@@ -165,12 +176,12 @@ class _LoginPageState extends State<LoginPage> {
                             obscureText: true,
                             decoration: InputDecoration(
                               contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 12.0),
+                              EdgeInsets.symmetric(horizontal: 12.0),
                               hintText: '비밀번호를 입력해주세요.',
                               errorText: !logincheck ? '비밀번호가 틀렸습니다.' : null,
                               errorBorder: OutlineInputBorder(
                                 borderSide:
-                                    BorderSide(color: Colors.red, width: 2.0),
+                                BorderSide(color: Colors.red, width: 2.0),
                                 borderRadius: BorderRadius.circular(14.0),
                               ),
                               border: OutlineInputBorder(
@@ -182,9 +193,8 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             controller: passwordController,
                             onChanged: (value) {
-                              Login(
-                                  emailController.text, passwordController.text);
                               _updateButtonState();
+                              Login(emailController.text, passwordController.text);
                             }),
                       ),
                     ],
@@ -198,18 +208,18 @@ class _LoginPageState extends State<LoginPage> {
                 child: ElevatedButton(
                   onPressed: _isButtonEnabled
                       ? () {
-                          Login(emailController.text, passwordController.text);
-                          if (logincheck) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MapPage(
-                                        name: name,
-                                      )),
-                            );
-                          }
-                          setState(() => isButtonActive = false);
-                        }
+                    Login(emailController.text, passwordController.text);
+                    if(logincheck) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapPage(
+                              name: name,
+                            )),
+                      );
+                    }
+                    setState(() => isButtonActive = false);
+                  }
                       : null,
                   child: Text(
                     "완료",
