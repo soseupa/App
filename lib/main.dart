@@ -3,7 +3,10 @@ import 'package:gaori/screen/Start_page.dart';
 import 'package:gaori/screen/calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Future.delayed(const Duration(seconds: 3));
+  await initializeDateFormatting();
   runApp(MyPage());
 }
 // Future main() async {
