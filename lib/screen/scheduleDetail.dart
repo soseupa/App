@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:gaori/screen/map.dart';
 import 'package:gaori/screen/searchPlace.dart';
+import 'package:gaori/screen/showScheduleDetail.dart';
 import 'package:http/http.dart' as http;
 
 import 'AddScheduleUsers.dart';
@@ -32,6 +33,7 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
   var order = 0;
   var id = 0;
   int scheduleCount = 0;
+  String inputTitle = '';
 
   @override
   void initState() {
@@ -232,8 +234,8 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                             color: Color(0xffFF3F9B),
                             size: 35,
                           ),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async{
+                            await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => AddScheduleUsers(
@@ -245,71 +247,114 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                     ]),
               ),
             ),
-            for (var detail in scheduleDetails)
-              tasks(detail['title'], detail['location'], detail['latitude'],
-                  detail['longitude'], detail['order'], detail['id']),
-            Center(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Container(
-                  width: 360,
-                  height: 85,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
-                      border: Border.all(color: Color(0xffF9F7F7), width: 3),
-                      color: Color(0xffF9F7F7)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => searchPlacePage()));
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, bottom: 3),
-                              child: Text("일정을 입력해 주세요",
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontFamily: 'NotoSansKR',
-                                      color: Color(0xffD9D9D9),
-                                      fontWeight: FontWeight.w600)),
+            Expanded(
+              child: Container(
+                constraints: BoxConstraints(
+                    maxHeight: MediaQuery.of(context).size.height - 50),
+                child: SingleChildScrollView(
+                  child: Column(children: [
+                    for (var detail in scheduleDetails)
+                      tasks(
+                          detail['title'],
+                          detail['location'],
+                          detail['latitude'],
+                          detail['longitude'],
+                          detail['order'],
+                          detail['id']),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 15.0),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Container(
+                            width: 360,
+                            height: 85,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                border: Border.all(
+                                    color: Color(0xffF9F7F7), width: 3),
+                                color: Color(0xffF9F7F7)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 10.0, top: 3),
+                                        child: Center(
+                                          child: Container(
+                                            width: 200,
+                                            height: 30,
+                                            child: TextFormField(
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  inputTitle = value;
+                                                });
+                                              },
+                                              style: TextStyle(
+                                                  fontSize: 18,
+                                                  fontFamily: 'NotoSansKR',
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.w600),
+                                              decoration: InputDecoration(
+                                                border: InputBorder.none,
+                                                hintText: '일정을 입력해 주세요',
+                                                hintStyle: TextStyle(
+                                                    fontSize: 18,
+                                                    fontFamily: 'NotoSansKR',
+                                                    color: Color(0xffD9D9D9),
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                            ),
+                                          ),
+                                        )),
+                                    InkWell(
+                                      onTap: () async {
+                                        await Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) => searchPlacePage(
+                                                      id: widget.id,
+                                                      title: inputTitle,
+                                                    )));
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 10.0),
+                                        child: Text('위치를 설정해 주세요',
+                                            style: TextStyle(
+                                                fontSize: 15,
+                                                fontFamily: 'NotoSansKR',
+                                                color: Color(0xffD9D9D9),
+                                                fontWeight: FontWeight.w400)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 15.0),
+                                  child: InkWell(
+                                    child: Icon(
+                                      Icons.add,
+                                      color: Colors.black,
+                                      size: 30,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 10.0, top: 3),
-                              child: Text('위치를 설정해 주세요',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      fontFamily: 'NotoSansKR',
-                                      color: Color(0xffD9D9D9),
-                                      fontWeight: FontWeight.w400)),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 15.0),
-                        child: InkWell(
-                          child: Icon(
-                            Icons.add,
-                            color: Colors.black,
-                            size: 30,
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ]),
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),
@@ -321,38 +366,50 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0),
-        child: Container(
-          width: 360,
-          height: 80,
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
-              border: Border.all(color: Color(0xffF9F7F7), width: 3),
-              color: Color(0xffF9F7F7)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 10.0,
+        child: InkWell(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ShowScheduleDetail(
+                          title: title,
+                          latitude: latitude,
+                          longitude: longitude,
+                        )));
+          },
+          child: Container(
+            width: 360,
+            height: 80,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(color: Color(0xffF9F7F7), width: 3),
+                color: Color(0xffF9F7F7)),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 10.0,
+                  ),
+                  child: Text("$title",
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'NotoSansKR',
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600)),
                 ),
-                child: Text("$title",
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontFamily: 'NotoSansKR',
-                        color: Colors.black,
-                        fontWeight: FontWeight.w600)),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 10.0, top: 3),
-                child: Text('$location',
-                    style: TextStyle(
-                        fontSize: 15,
-                        fontFamily: 'NotoSansKR',
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400)),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.only(left: 10.0, top: 3),
+                  child: Text('$location',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontFamily: 'NotoSansKR',
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400)),
+                ),
+              ],
+            ),
           ),
         ),
       ),
