@@ -43,19 +43,18 @@ class _AddScheduleUsersState extends State<AddScheduleUsers> {
     return Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
         appBar: buildAppBar(),
-        body: Center(
-            child: SingleChildScrollView(
+        body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.only(bottom: 12.0),
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  for (var friend in friendlist)
-                    alreadyFriend(friend['email'], friend['nickname']),
-                ]),
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              for (var friend in friendlist)
+                alreadyFriend(friend['email'], friend['nickname']),
+            ]),
           ),
-        )));
+        ));
   }
 
   Future<void> addFriendToSchedule(String selectedEmail) async {
