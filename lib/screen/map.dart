@@ -28,8 +28,8 @@ class _MapPageState extends State<MapPage> {
       ..setNavigationDelegate(
         NavigationDelegate(),
       )
-      ..loadRequest(Uri.parse(
-          'http://34.64.108.196/map?id=${widget.id}&token=$token'));
+      ..loadRequest(
+          Uri.parse('http://34.64.108.196/map?id=${widget.id}&token=$token'));
     super.initState();
   }
 

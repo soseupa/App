@@ -205,7 +205,6 @@ class _MapPageState extends State<MapPage> {
                               date: selectedDay,
                             ))).then((value) => {
                       _searchSchedule(),
-
                     });
               },
               child: Icon(

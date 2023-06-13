@@ -6,7 +6,9 @@ import 'Login.dart';
 class searchPlacePage extends StatefulWidget {
   final int id;
   final String title;
+
   searchPlacePage({required this.id, required this.title});
+
   @override
   State<searchPlacePage> createState() => _searchPlacePageState();
 }
@@ -21,6 +23,7 @@ class _searchPlacePageState extends State<searchPlacePage> {
   String email = '';
   String nickname = '';
   late WebViewController controller;
+
   @override
   void initState() {
     String token = inputData?.token ?? "";
@@ -40,7 +43,9 @@ class _searchPlacePageState extends State<searchPlacePage> {
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),
       appBar: buildAppBar(),
-      body: WebViewWidget(controller: controller,),
+      body: WebViewWidget(
+        controller: controller,
+      ),
     );
   }
 
@@ -60,7 +65,7 @@ class _searchPlacePageState extends State<searchPlacePage> {
           padding: const EdgeInsets.only(right: 18.0),
           child: Center(
             child: InkWell(
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
               child: Text(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -6,7 +5,9 @@ class ShowScheduleDetail extends StatefulWidget {
   final double latitude;
   final double longitude;
   final String title;
-  ShowScheduleDetail({required this.latitude, required this.longitude, required this.title});
+
+  ShowScheduleDetail(
+      {required this.latitude, required this.longitude, required this.title});
 
   @override
   State<ShowScheduleDetail> createState() => _ShowScheduleDetailState();

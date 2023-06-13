@@ -228,11 +228,12 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                           ),
                           onTap: () async {
                             await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => AddScheduleUsers(
-                                          id: widget.id,
-                                        ))).then((value) => findScheduleDetails());
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AddScheduleUsers(
+                                              id: widget.id,
+                                            )))
+                                .then((value) => findScheduleDetails());
                           },
                         ),
                       ),

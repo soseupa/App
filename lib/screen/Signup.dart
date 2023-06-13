@@ -1,9 +1,9 @@
-import 'dart:async';
+import 'dart:convert';
 import 'dart:core';
+
 import 'package:flutter/material.dart';
 import 'package:gaori/screen/Set_email.dart';
 import 'package:gaori/screen/Start_page.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class SignupPage extends StatefulWidget {
@@ -23,9 +23,12 @@ class _SignupPageState extends State<SignupPage> {
   bool isButtonActive = false;
   bool _checknickname = true;
   late TextEditingController controller = TextEditingController();
-  final TextEditingController nicknameController = TextEditingController(); // 닉네임 넣기
-  final TextEditingController passwordController = TextEditingController(); // 비밀번호 넣기
-  final TextEditingController passwordCheckController = TextEditingController(); // 비밀번호 유효성 검사 위함
+  final TextEditingController nicknameController =
+      TextEditingController(); // 닉네임 넣기
+  final TextEditingController passwordController =
+      TextEditingController(); // 비밀번호 넣기
+  final TextEditingController passwordCheckController =
+      TextEditingController(); // 비밀번호 유효성 검사 위함
   final myController = TextEditingController();
   final _confirmPasswordFocusNode = FocusNode();
   bool _isButtonEnabled = false;
@@ -46,20 +49,24 @@ class _SignupPageState extends State<SignupPage> {
     passwordCheckController.addListener(_updateButtonState);
   }
 
-  void _updateButtonState() { // 버튼이 활성화
+  void _updateButtonState() {
+    // 버튼이 활성화
     setState(() {
-      _isButtonEnabled = _checknickname && nicknameController.text.isNotEmpty &&
-          passwordController.text.isNotEmpty && passwordCheckController.text.isNotEmpty && passwordController.text == passwordCheckController.text;
+      _isButtonEnabled = _checknickname &&
+          nicknameController.text.isNotEmpty &&
+          passwordController.text.isNotEmpty &&
+          passwordCheckController.text.isNotEmpty &&
+          passwordController.text == passwordCheckController.text;
     });
   }
 
   bool _passwordmatch = true;
+
   void CheckPasswordMatch() {
     String password = passwordController.text;
     String confirmpassword = passwordCheckController.text;
 
-    setState(()
-    {
+    setState(() {
       _passwordmatch = password == confirmpassword;
     });
   }
@@ -73,20 +80,18 @@ class _SignupPageState extends State<SignupPage> {
     );
     print(nickname);
 
-    if(response.statusCode == 200) {
+    if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
 
-      if(data && nickname.length<=0) {
+      if (data && nickname.length <= 0) {
         print(nickname.length);
         _checknickname = false;
         print('사용 가능하지않음');
-      }
-      else {
+      } else {
         _checknickname = true;
         print('닉네임 중복 아님');
       }
-    }
-    else {
+    } else {
       print(nickname.length);
       _checknickname = false;
       print('닉네임 중복임');
@@ -130,14 +135,16 @@ class _SignupPageState extends State<SignupPage> {
                   width: 109, height: 117),
             ),
           ),
-          Padding( // progress bar
+          Padding(
+            // progress bar
             padding: const EdgeInsets.only(top: 22.0, bottom: 23.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Container(
                   child: Center(
-                    child: Text('1',
+                    child: Text(
+                      '1',
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xffFF67B0),
@@ -170,7 +177,8 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 Container(
                   child: Center(
-                    child: Text('2',
+                    child: Text(
+                      '2',
                       style: TextStyle(
                         fontSize: 16,
                         color: Colors.white,
@@ -210,15 +218,17 @@ class _SignupPageState extends State<SignupPage> {
                           checkNicknameDulication();
                         },
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 12.0),
                           hintText: '닉네임을 입력해주세요.',
                           border: OutlineInputBorder(
                             borderSide: BorderSide.none,
                             borderRadius: BorderRadius.circular(14.0),
                           ),
-                          errorText: ! _checknickname ? '닉네임이 중복되었어요.' : null,
+                          errorText: !_checknickname ? '닉네임이 중복되었어요.' : null,
                           errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red, width: 2.0),
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           filled: true,
@@ -280,14 +290,16 @@ class _SignupPageState extends State<SignupPage> {
                         focusNode: _confirmPasswordFocusNode,
                         obscureText: true,
                         decoration: InputDecoration(
-                          contentPadding: EdgeInsets.symmetric(horizontal: 12.0),
+                          contentPadding:
+                              EdgeInsets.symmetric(horizontal: 12.0),
                           hintText: '비밀번호를 입력해주세요.',
                           errorStyle: TextStyle(
                             fontSize: 11,
                           ),
-                          errorText: ! _passwordmatch ? '비밀번호가 일치하지않아요.' : null,
+                          errorText: !_passwordmatch ? '비밀번호가 일치하지않아요.' : null,
                           errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.red, width: 2.0),
+                            borderSide:
+                                BorderSide(color: Colors.red, width: 2.0),
                             borderRadius: BorderRadius.circular(14.0),
                           ),
                           border: OutlineInputBorder(
@@ -313,12 +325,12 @@ class _SignupPageState extends State<SignupPage> {
               child: ElevatedButton(
                 onPressed: _isButtonEnabled
                     ? () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SetEmailPage()),
-                  );
-                }
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SetEmailPage()),
+                        );
+                      }
                     : null,
                 child: Text(
                   "다음",

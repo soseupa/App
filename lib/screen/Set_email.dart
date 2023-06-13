@@ -85,7 +85,8 @@ class SetEmailPageState extends State<SetEmailPage> {
     var email = emailController.text;
     var body = jsonEncode({'email': email});
 
-    var response = await http.post(url, body: body, headers: {'Content-Type': 'application/json'});
+    var response = await http
+        .post(url, body: body, headers: {'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       print("이메일 전송 성공 ");
       print(response.body);

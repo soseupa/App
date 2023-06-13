@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:http/http.dart' as http;
+
 import 'Login.dart';
 
 class NoticePage extends StatefulWidget {
@@ -69,7 +70,10 @@ class _NoticePageState extends State<NoticePage> {
         Center(
           child: SingleChildScrollView(
             child: Column(
-              children: [for(var request in requestList) Notice(request['email'], request['nickname'], request['id'])],
+              children: [
+                for (var request in requestList)
+                  Notice(request['email'], request['nickname'], request['id'])
+              ],
             ),
           ),
         ),
@@ -80,15 +84,15 @@ class _NoticePageState extends State<NoticePage> {
   Future<void> acceptFriendRequest(int senderId) async {
     String token = inputData?.token ?? "";
 
-    final url = Uri.parse('http://34.64.137.179:8080/friend/request/accept?senderId=$senderId');
+    final url = Uri.parse(
+        'http://34.64.137.179:8080/friend/request/accept?senderId=$senderId');
     final headers = {'Authorization': 'Bearer $token'};
     final response = await http.get(url, headers: headers);
 
     print(senderId);
     if (response.statusCode == 200) {
       print("수락 완료");
-    }
-    else {
+    } else {
       print("수락 실패");
     }
   }
@@ -152,7 +156,8 @@ class _NoticePageState extends State<NoticePage> {
                         acceptFriendRequest(id);
                         print(id);
                         setState(() {
-                          requestList.removeWhere((element) => element['id'] == id);
+                          requestList
+                              .removeWhere((element) => element['id'] == id);
                         });
                       },
                       style: ElevatedButton.styleFrom(
