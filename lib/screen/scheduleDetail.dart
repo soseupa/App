@@ -41,14 +41,6 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
     findScheduleDetails();
   }
 
-  // @override
-  // void dispose() {
-  //   setState(() {
-  //     findScheduleDetails();
-  //   });
-  //   super.dispose();
-  // }
-
   Future<void> findScheduleDetails() async {
     String token = inputData?.token ?? "";
 
@@ -234,13 +226,13 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                             color: Color(0xffFF3F9B),
                             size: 35,
                           ),
-                          onTap: () async{
+                          onTap: () async {
                             await Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => AddScheduleUsers(
                                           id: widget.id,
-                                        )));
+                                        ))).then((value) => findScheduleDetails());
                           },
                         ),
                       ),
@@ -317,7 +309,8 @@ class _ScheduleDetailPageState extends State<ScheduleDetailPage> {
                                         await Navigator.push(
                                             context,
                                             MaterialPageRoute(
-                                                builder: (context) => searchPlacePage(
+                                                builder: (context) =>
+                                                    searchPlacePage(
                                                       id: widget.id,
                                                       title: inputTitle,
                                                     )));

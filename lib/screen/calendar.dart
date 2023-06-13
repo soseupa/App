@@ -149,7 +149,7 @@ class _MapPageState extends State<MapPage> {
                           id: userId,
                           title: title,
                         )),
-              );
+              ).then((value) => _searchSchedule());
             },
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -197,13 +197,16 @@ class _MapPageState extends State<MapPage> {
         Padding(
           padding: const EdgeInsets.only(right: 35.0),
           child: InkWell(
-              onTap: () async{
+              onTap: () async {
                 await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => AddSchedulePage(
                               date: selectedDay,
-                            )));
+                            ))).then((value) => {
+                      _searchSchedule(),
+
+                    });
               },
               child: Icon(
                 Icons.add,
@@ -315,16 +318,16 @@ class _MapPageState extends State<MapPage> {
                 fontFamily: 'NotoSansKR',
                 fontWeight: FontWeight.w500),
             defaultDecoration: BoxDecoration(
-                shape: BoxShape.circle,
-                // borderRadius: BorderRadius.circular(7.39)
+              shape: BoxShape.circle,
+              // borderRadius: BorderRadius.circular(7.39)
             ),
             selectedDecoration: BoxDecoration(
               shape: BoxShape.rectangle,
-                // color: Color(0xffFBEFF5),
-                color: Color(
-                  0xffF9F7F7,
-                ),
-                // borderRadius: BorderRadius.circular(7.39)
+              // color: Color(0xffFBEFF5),
+              color: Color(
+                0xffF9F7F7,
+              ),
+              // borderRadius: BorderRadius.circular(7.39)
             ),
             markersAutoAligned: true,
             markerSize: 100,

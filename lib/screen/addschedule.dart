@@ -56,15 +56,21 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
     if (response.statusCode == 200) {
       print('SCHEDULE 생성 완료');
       //TODO : 일정 추가 완료 알림창
-      showDialog(context: context, builder: (BuildContext context) => AlertDialog(
-        title: Text('일정 추가 완료'),
-        content: Text('일정이 추가되었습니다.'),
-        actions: [
-          TextButton(onPressed: () {
-            Navigator.of(context).pop();
-          }, child: Text('확인'))
-        ],
-      ));
+      showDialog(
+          context: context,
+          builder: (BuildContext context) => AlertDialog(
+                title: Text('일정 추가 완료'),
+                content: Text('일정이 추가되었습니다.'),
+                actions: [
+                  InkWell(
+                    child: Text('확인'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              ));
     } else {
       print('SCHEDULE 생성 실패');
     }
@@ -163,7 +169,6 @@ class _AddSchedulePageState extends State<AddSchedulePage> {
           ElevatedButton(
             onPressed: () {
               _makeSchedule();
-              Navigator.pop(context);
             },
             child: Text(
               '일정 추가하기',
